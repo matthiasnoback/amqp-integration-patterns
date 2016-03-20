@@ -2,6 +2,6 @@
 
 namespace AMQPIntegrationPatterns;
 
-class Simple
+interface Message
 {
 }

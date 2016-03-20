@@ -2,7 +2,9 @@
   "name": "matthiasnoback/amqp-integration-patterns",
   "type": "library",
   "require": {
-    "videlalvaro/php-amqplib": "^2.6"
+    "videlalvaro/php-amqplib": "^2.6",
+    "beberlei/assert": "^2.4",
+    "ramsey/uuid": "^3.2"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"
