@@ -25,10 +25,10 @@ end
 Vagrant.configure("2") do |config|
 
     config.vm.provider :virtualbox do |v|
-        v.name = "default"
+        v.name = "amqp-integration-patterns"
         v.customize [
             "modifyvm", :id,
-            "--name", "default",
+            "--name", "amqp-integration-patterns",
             "--memory", 512,
             "--natdnshostresolver1", "on",
             "--cpus", 1,
