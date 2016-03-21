@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns;
 
-final class EventMessage
+final class EventMessage implements Message
 {
     /**
      * @var MessageIdentifier
@@ -28,15 +28,18 @@ final class EventMessage
     }
 
     /**
+     * @return MessageIdentifier
+     */
+    public function messageIdentifier()
+    {
+        return $this->messageIdentifier;
+    }
+
+    /**
      * @return Body
      */
     public function body()
     {
         return $this->body;
-    }
-
-    public function messageIdentifier()
-    {
-        return $this->messageIdentifier;
     }
 }

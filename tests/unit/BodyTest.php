@@ -3,24 +3,19 @@
 namespace AMQPIntegrationPatterns\Tests\Unit;
 
 use AMQPIntegrationPatterns\Body;
+use AMQPIntegrationPatterns\ContentType;
 
 class BodyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function it_has_a_body_text()
+    public function it_has_a_body_text_with_a_content_type()
     {
         $bodyText = 'some text';
-        $body = new Body($bodyText);
+        $contentType = new ContentType('plain/text');
+        $body = new Body($contentType, $bodyText);
         $this->assertSame($bodyText, (string) $body);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_be_empty()
-    {
-        $this->assertSame('', (string) Body::emptyBody());
+        $this->assertEquals($contentType, $body->contentType());
     }
 }
