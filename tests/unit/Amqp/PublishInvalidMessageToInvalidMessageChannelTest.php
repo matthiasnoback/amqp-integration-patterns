@@ -8,7 +8,7 @@ use AMQPIntegrationPatterns\Amqp\PublishInvalidMessageToInvalidMessageChannel;
 use AMQPIntegrationPatterns\Receiver;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AlwaysSucceedingConsumer;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\ConsumerFailsBecauseMessageIsInvalid;
-use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\MessageDummy;
+use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AmqpMessageDummy;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AlwaysSucceedingProducer;
 
 class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framework_TestCase
@@ -18,7 +18,7 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
      */
     public function it_lets_the_next_consumer_consume_the_message()
     {
-        $messageDummy = new MessageDummy();
+        $messageDummy = new AmqpMessageDummy();
 
         $nextReceiverMock = new AlwaysSucceedingConsumer();
 
@@ -34,7 +34,7 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
      */
     public function it_publishes_the_message_that_is_found_to_be_invalid_to_an_invalid_message_channel()
     {
-        $messageDummy = new MessageDummy();
+        $messageDummy = new AmqpMessageDummy();
 
         $nextReceiverMock = new ConsumerFailsBecauseMessageIsInvalid();
 
