@@ -11,8 +11,12 @@ class ChannelMock implements Channel
 {
     public $actualMessage;
 
-    public function write(Message $message)
+    public function publish(Message $message)
     {
         $this->actualMessage = $message;
+    }
+
+    public function waitForMessages(callable $callback)
+    {
     }
 }

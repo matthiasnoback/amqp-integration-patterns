@@ -23,6 +23,6 @@ class MessageTranslator implements Receiver
     public function process(Message $message)
     {
         $translatedMessage = $this->translator->translate($message);
-        $this->channel->write($translatedMessage);
+        $this->channel->publish($translatedMessage);
     }
 }

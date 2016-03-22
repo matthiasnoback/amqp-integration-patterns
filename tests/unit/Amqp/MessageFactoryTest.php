@@ -5,6 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\Body;
 use AMQPIntegrationPatterns\ContentType;
+use AMQPIntegrationPatterns\EventMessage;
 use AMQPIntegrationPatterns\MessageIdentifier;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -69,5 +70,24 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(MessageIsInvalid::class, 'Invalid body');
         $this->messageFactory->extractBody($message);
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_an_amqp_message_for_an_event_message()
+    {
+        $bodyText = '{"message":"Hello"}';
+        $contentType = 'application/json';
+        $messageIdentifier = MessageIdentifier::random();
+        $eventMessage = EventMessage::create(
+            $messageIdentifier,
+            new Body(new ContentType($contentType), $bodyText)
+        );
+
+        $amqpMessage = $this->messageFactory->createAmqpMessageFromEventMessage($eventMessage);
+        $this->assertSame($bodyText, $amqpMessage->body);
+        $this->assertSame($contentType, $amqpMessage->get('content_type'));
+        $this->assertSame((string) $messageIdentifier, $amqpMessage->get('message_id'));
     }
 }

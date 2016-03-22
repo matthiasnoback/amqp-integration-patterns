@@ -50,4 +50,18 @@ class MessageFactory
             throw new MessageIsInvalid('Invalid body', $exception);
         }
     }
+
+    /**
+     * @param EventMessage $message
+     * @return AMQPMessage
+     */
+    public function createAmqpMessageFromEventMessage(EventMessage $message)
+    {
+        $amqpMessage = new AMQPMessage();
+        $amqpMessage->body = (string) $message->body();
+        $amqpMessage->set('content_type', (string) $message->body()->contentType());
+        $amqpMessage->set('message_id', (string) $message->messageIdentifier());
+
+        return $amqpMessage;
+    }
 }
