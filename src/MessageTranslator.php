@@ -10,11 +10,11 @@ class MessageTranslator implements Receiver
     private $translator;
 
     /**
-     * @var Channel
+     * @var MessageChannel
      */
     private $channel;
 
-    public function __construct(Translator $translator, Channel $channel)
+    public function __construct(Translator $translator, MessageChannel $channel)
     {
         $this->channel = $channel;
         $this->translator = $translator;

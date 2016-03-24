@@ -2,58 +2,41 @@
 
 namespace AMQPIntegrationPatterns\Amqp;
 
-use AMQPIntegrationPatterns\Channel;
+use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
+use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
+use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\EventMessage;
 use AMQPIntegrationPatterns\Message;
 use Assert\Assertion;
-use PhpAmqpLib\Channel\AMQPChannel;
 
-class AmqpMessageChannel implements Channel
+class AmqpMessageChannel implements MessageChannel
 {
-    /**
-     * @var AmqpMessageChannel
-     */
-    private $channel;
-
-    /**
-     * @var string
-     */
-    private $queueName;
-
     /**
      * @var MessageFactory
      */
     private $messageFactory;
 
     /**
-     * @var string
+     * @var DeclaredExchange
      */
-    private $exchangeName;
+    private $exchange;
 
     /**
-     * @var string
+     * @var DeclaredQueue
      */
+    private $queue;
+
     private $routingKey;
 
-    /**
-     * @var bool
-     */
-    private $wait = false;
-
-    public function __construct(AMQPChannel $channel, $queueName, $exchangeName, $routingKey, MessageFactory $messageFactory)
-    {
-        $this->channel = $channel;
-
-        Assertion::string($queueName);
-        $this->queueName = $queueName;
-
-        Assertion::string($exchangeName);
-        Assertion::notEmpty($exchangeName);
-        $this->exchangeName = $exchangeName;
-
-        Assertion::string($routingKey);
+    public function __construct(
+        DeclaredExchange $exchange,
+        DeclaredQueue $queue,
+        $routingKey,
+        MessageFactory $messageFactory
+    ) {
+        $this->exchange = $exchange;
+        $this->queue = $queue;
         $this->routingKey = $routingKey;
-
         $this->messageFactory = $messageFactory;
     }
 
@@ -62,41 +45,21 @@ class AmqpMessageChannel implements Channel
      */
     public function publish(Message $message)
     {
+        // TODO move this logic to the message factory (should be an abstract factory)
         Assertion::isInstanceOf($message, EventMessage::class);
 
         $amqpMessage = $this->messageFactory->createAmqpMessageFromEventMessage($message);
 
-        $this->channel->basic_publish($amqpMessage, $this->exchangeName, $this->routingKey);
+        $this->exchange->publish($amqpMessage, $this->routingKey);
     }
 
     public function waitForMessages(callable $callback)
     {
-        $this->wait = true;
-
-        $this->channel->basic_consume(
-            $this->queueName,
-            '', // consumer tag
-            false, // no local
-            false, // no ack
-            false, // exclusive
-            false, // no wait
-            $callback
-        );
-
-        /*
-         * @TODO think about the callback system
-         */
-
-        while(count($this->channel->callbacks)) {
-            if (!$this->wait) {
-                break;
-            }
-            $this->channel->wait();
-        }
+        $this->queue->consume($callback)->wait();
     }
 
-    public function stopWaiting()
+    public function purge()
     {
-        $this->wait = false;
+        $this->queue->purge();
     }
 }

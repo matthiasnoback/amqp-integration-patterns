@@ -3,7 +3,7 @@
 
 namespace AMQPIntegrationPatterns;
 
-interface Channel
+interface MessageChannel
 {
     /**
      * Write a message to this channel
@@ -20,4 +20,10 @@ interface Channel
      * @return void
      */
     public function waitForMessages(callable $callback);
+
+    /**
+     * Purge the queue associated with this channel
+     * @return void
+     */
+    public function purge();
 }

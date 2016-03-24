@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit;
 
 
 use AMQPIntegrationPatterns\MessageTranslator;
-use AMQPIntegrationPatterns\Tests\Unit\TestDoubles\ChannelMock;
+use AMQPIntegrationPatterns\Tests\Unit\TestDoubles\MessageChannelMock;
 use AMQPIntegrationPatterns\Tests\Unit\TestDoubles\MessageDummy;
 use AMQPIntegrationPatterns\Tests\Unit\TestDoubles\TranslatorStub;
 
@@ -17,7 +17,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase
     public function it_translates_a_message_before_sending_it_to_the_designated_channel()
     {
         $message = new MessageDummy();
-        $channel = new ChannelMock();
+        $channel = new MessageChannelMock();
 
         $translatedMessage = new MessageDummy();
         $translator = new TranslatorStub($translatedMessage);

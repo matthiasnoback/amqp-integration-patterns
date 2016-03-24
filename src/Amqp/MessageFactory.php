@@ -61,6 +61,7 @@ class MessageFactory
         $amqpMessage->body = (string) $message->body();
         $amqpMessage->set('content_type', (string) $message->body()->contentType());
         $amqpMessage->set('message_id', (string) $message->messageIdentifier());
+        $amqpMessage->set('delivery_mode', 2);
 
         return $amqpMessage;
     }

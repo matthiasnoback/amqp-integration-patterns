@@ -31,10 +31,6 @@ class ConsumptionFlag
 
     private function __construct($flag)
     {
-        if (!in_array($flag, [self::MSG_ACK, self::MSG_REJECT, self::MSG_REJECT_REQUEUE, self::MSG_SINGLE_NACK_REQUEUE])) {
-            throw new \InvalidArgumentException('Invalid flag');
-        }
-
         $this->flag = $flag;
     }
 

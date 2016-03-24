@@ -89,5 +89,6 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($bodyText, $amqpMessage->body);
         $this->assertSame($contentType, $amqpMessage->get('content_type'));
         $this->assertSame((string) $messageIdentifier, $amqpMessage->get('message_id'));
+        $this->assertSame(2, $amqpMessage->get('delivery_mode'));
     }
 }

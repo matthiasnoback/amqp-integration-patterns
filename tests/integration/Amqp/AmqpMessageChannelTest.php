@@ -6,6 +6,7 @@ namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageChannel;
 use AMQPIntegrationPatterns\Amqp\ChannelFactory;
+use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
 use AMQPIntegrationPatterns\Body;
 use AMQPIntegrationPatterns\ContentType;
 use AMQPIntegrationPatterns\EventMessage;
@@ -32,6 +33,8 @@ class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
      */
     public function it_can_publish_messages_to_a_queue_and_read_a_message_from_it()
     {
+        $this->amqpMessageChannel->purge();
+
         // publish a message
         $bodyText = '{"message":"Hello"}';
         $contentType = 'application/json';
@@ -43,15 +46,25 @@ class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
 
         $this->amqpMessageChannel->publish($eventMessage);
 
-        // read a message
-        $callback = function(AMQPMessage $amqpMessage) use ($bodyText, $contentType, $messageIdentifier) {
-            $this->assertSame($bodyText, $amqpMessage->body);
-            $this->assertSame($contentType, $amqpMessage->get('content_type'));
-            $this->assertSame((string) $messageIdentifier, $amqpMessage->get('message_id'));
 
-            $this->amqpMessageChannel->stopWaiting();
+        // read a message
+        $actualMessage = null;
+        $callback = function (AMQPMessage $amqpMessage, QueueConsumer $consumer) use (
+            $bodyText,
+            $contentType,
+            $messageIdentifier,
+            &$actualMessage
+        ) {
+            $actualMessage = $amqpMessage;
+            $consumer->stopWaiting();
         };
 
         $this->amqpMessageChannel->waitForMessages($callback);
+
+        $this->assertTrue($actualMessage instanceof AMQPMessage);
+        /** @var $actualMessage AMQPMessage */
+        $this->assertSame($bodyText, $actualMessage->body);
+        $this->assertSame($contentType, $actualMessage->get('content_type'));
+        $this->assertSame((string)$messageIdentifier, $actualMessage->get('message_id'));
     }
 }

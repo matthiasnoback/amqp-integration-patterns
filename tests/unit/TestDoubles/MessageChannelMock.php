@@ -4,10 +4,10 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\TestDoubles;
 
 
-use AMQPIntegrationPatterns\Channel;
+use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\Message;
 
-class ChannelMock implements Channel
+class MessageChannelMock implements MessageChannel
 {
     public $actualMessage;
 
@@ -17,6 +17,10 @@ class ChannelMock implements Channel
     }
 
     public function waitForMessages(callable $callback)
+    {
+    }
+
+    public function purge()
     {
     }
 }

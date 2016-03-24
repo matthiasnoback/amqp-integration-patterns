@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp;
 
+use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 class ChannelFactory
@@ -18,28 +19,16 @@ class ChannelFactory
 
     public function createEventMessageChannel($eventName)
     {
-        $exchangeName = 'events';
+        $declaredExchange = ExchangeBuilder::create($this->channel, 'events')
+            ->declareExchange();
 
-        $this->channel->exchange_declare(
-            $exchangeName,
-            'topic',
-            false, // passive
-            true, // durable
-            false // autodelete
-        );
-
-        list($queueName) = $this->channel->queue_declare(
-            '',
-            false, // passive
-            true, // durable
-            false, // exclusive
-            false // autodelete
-        );
-
+        $queueName = str_replace('.', '_', $eventName);
         $routingKey = $eventName;
 
-        $this->channel->queue_bind($queueName, $exchangeName, $eventName);
+        $declaredQueue = $declaredExchange->buildQueue($queueName)
+            ->withBinding($routingKey)
+            ->declareQueue();
 
-        return new AmqpMessageChannel($this->channel, $queueName, $exchangeName, $routingKey, new MessageFactory());
+        return new AmqpMessageChannel($declaredExchange, $declaredQueue, $routingKey, new MessageFactory());
     }
 }

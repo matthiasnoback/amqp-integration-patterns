@@ -10,11 +10,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
+            <directory>src/</directory>
         </whitelist>
     </filter>
 <!--
