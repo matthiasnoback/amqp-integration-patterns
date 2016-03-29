@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns;
 
-class MessageTranslator implements Receiver
+final class MessageTranslator
 {
     /**
      * @var Translator
@@ -20,9 +20,9 @@ class MessageTranslator implements Receiver
         $this->translator = $translator;
     }
 
-    public function process(Message $message)
+    public function consume(Message $message)
     {
         $translatedMessage = $this->translator->translate($message);
-        $this->channel->publish($translatedMessage);
+        $this->channel->send($translatedMessage);
     }
 }

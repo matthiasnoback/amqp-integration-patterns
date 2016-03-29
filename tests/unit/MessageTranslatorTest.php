@@ -23,7 +23,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase
         $translator = new TranslatorStub($translatedMessage);
 
         $messageTranslator = new MessageTranslator($translator, $channel);
-        $messageTranslator->process($message);
+        $messageTranslator->consume($message);
 
         $this->assertSame($message, $translator->actualMessage);
         $this->assertSame($translatedMessage, $channel->actualMessage);

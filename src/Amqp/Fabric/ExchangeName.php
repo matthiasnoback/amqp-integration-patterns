@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
 use Assert\Assertion;
 
-class ExchangeName
+final class ExchangeName
 {
     /**
      * @var string

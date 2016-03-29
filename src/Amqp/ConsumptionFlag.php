@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp;
 
-class ConsumptionFlag
+final class ConsumptionFlag
 {
     /**
      * Flag for message ack

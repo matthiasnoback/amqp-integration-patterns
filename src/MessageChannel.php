@@ -3,6 +3,9 @@
 
 namespace AMQPIntegrationPatterns;
 
+/**
+ * TODO split into read and write message endpoints (channel is not something represented in code actually)
+ */
 interface MessageChannel
 {
     /**
@@ -11,7 +14,7 @@ interface MessageChannel
      * @param Message $message
      * @return void
      */
-    public function publish(Message $message);
+    public function send(Message $message);
 
     /**
      * Start waiting for new messages

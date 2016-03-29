@@ -11,7 +11,7 @@ class MessageChannelMock implements MessageChannel
 {
     public $actualMessage;
 
-    public function publish(Message $message)
+    public function send(Message $message)
     {
         $this->actualMessage = $message;
     }

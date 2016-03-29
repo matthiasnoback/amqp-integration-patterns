@@ -38,7 +38,7 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $eventMessage = $this->messageFactory->createEventMessageFrom($amqpMessage);
         $this->assertEquals(new MessageIdentifier($messageId), $eventMessage->messageIdentifier());
-        $this->assertEquals(new Body(new ContentType($contentType), $bodyText), $eventMessage->body());
+        $this->assertEquals(new Body(ContentType::fromString($contentType), $bodyText), $eventMessage->body());
     }
 
     /**
@@ -82,7 +82,7 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
         $messageIdentifier = MessageIdentifier::random();
         $eventMessage = EventMessage::create(
             $messageIdentifier,
-            new Body(new ContentType($contentType), $bodyText)
+            new Body(ContentType::fromString($contentType), $bodyText)
         );
 
         $amqpMessage = $this->messageFactory->createAmqpMessageFromEventMessage($eventMessage);

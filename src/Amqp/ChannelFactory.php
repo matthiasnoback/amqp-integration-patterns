@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Amqp;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use PhpAmqpLib\Channel\AMQPChannel;
 
-class ChannelFactory
+final class ChannelFactory
 {
     /**
      * @var AMQPChannel

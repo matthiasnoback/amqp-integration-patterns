@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Serialization;
 
-interface Deserializable
+interface CanBeDenormalized
 {
     /**
      * Construct an instance of this class based on the provided data.
@@ -10,5 +10,5 @@ interface Deserializable
      * @param array $data
      * @return self
      */
-    public static function deserialize(array $data);
+    public static function denormalize(array $data);
 }

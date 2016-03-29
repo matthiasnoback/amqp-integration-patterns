@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
 use Assert\Assertion;
 
-class QueueName
+final class QueueName
 {
     /**
      * @var string
@@ -14,7 +14,7 @@ class QueueName
     public function __construct($name)
     {
         // TODO verify this assumption:
-        Assertion::regex($name, '/^[a-zA-Z_-]+$/', 'Invalid queue name');
+        Assertion::regex($name, '/^[a-zA-Z0-9_-]+$/', 'Invalid queue name');
         $this->name = $name;
     }
 

@@ -2,10 +2,10 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles;
 
-use AMQPIntegrationPatterns\Serialization\Deserializable;
-use AMQPIntegrationPatterns\Serialization\Serializable;
+use AMQPIntegrationPatterns\Serialization\CanBeDenormalized;
+use AMQPIntegrationPatterns\Serialization\CanBeNormalized;
 
-class SimpleSerializableClass implements Serializable, Deserializable
+class SimpleCanBeNormalizedClass implements CanBeNormalized, CanBeDenormalized
 {
     private $field;
 
@@ -14,12 +14,12 @@ class SimpleSerializableClass implements Serializable, Deserializable
         $this->field = $value;
     }
 
-    public function serialize()
+    public function normalize()
     {
         return ['field' => $this->field];
     }
 
-    public static function deserialize(array $data)
+    public static function denormalize(array $data)
     {
         return new self($data['field']);
     }

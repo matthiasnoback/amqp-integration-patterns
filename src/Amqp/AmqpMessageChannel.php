@@ -7,9 +7,10 @@ use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\EventMessage;
 use AMQPIntegrationPatterns\Message;
+use AMQPIntegrationPatterns\MessageSender;
 use Assert\Assertion;
 
-class AmqpMessageChannel implements MessageChannel
+final class AmqpMessageChannel implements MessageChannel, MessageSender
 {
     /**
      * @var MessageFactory
@@ -43,7 +44,7 @@ class AmqpMessageChannel implements MessageChannel
     /**
      * @param EventMessage $message
      */
-    public function publish(Message $message)
+    public function send(Message $message)
     {
         // TODO move this logic to the message factory (should be an abstract factory)
         Assertion::isInstanceOf($message, EventMessage::class);

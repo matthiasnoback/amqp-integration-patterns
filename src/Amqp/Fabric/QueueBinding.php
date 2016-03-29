@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
 use Assert\Assertion;
 
-class QueueBinding
+final class QueueBinding
 {
     /**
      * @var DeclaredExchange

@@ -10,7 +10,7 @@ namespace AMQPIntegrationPatterns;
  * - The message is of an incorrect data type
  * -
  */
-class MessageIsInvalid extends \LogicException
+final class MessageIsInvalid extends \LogicException
 {
     public function __construct($message, \Exception $previous = null)
     {

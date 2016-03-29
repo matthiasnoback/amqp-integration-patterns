@@ -34,7 +34,7 @@ class MessageFactory
     public function extractContentTypeFrom(AMQPMessage $amqpMessage)
     {
         try {
-            return new ContentType($amqpMessage->get('content_type'));
+            return ContentType::fromString($amqpMessage->get('content_type'));
         } catch (\Exception $exception) {
             throw new MessageIsInvalid('Invalid content type', $exception);
         }

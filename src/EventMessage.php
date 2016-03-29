@@ -2,6 +2,9 @@
 
 namespace AMQPIntegrationPatterns;
 
+/**
+ * TODO rethink object hierarchy
+ */
 final class EventMessage implements Message
 {
     /**

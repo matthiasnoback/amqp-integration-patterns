@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Amqp\Fabric;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class DeclaredExchange
+final class DeclaredExchange
 {
     /**
      * @var AMQPChannel

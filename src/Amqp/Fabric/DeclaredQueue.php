@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Amqp\Fabric;
 use Assert\Assertion;
 use PhpAmqpLib\Channel\AMQPChannel;
 
-class DeclaredQueue
+final class DeclaredQueue
 {
     /**
      * @var AMQPChannel

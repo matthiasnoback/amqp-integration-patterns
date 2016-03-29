@@ -6,12 +6,10 @@ namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageChannel;
 use AMQPIntegrationPatterns\Amqp\ChannelFactory;
-use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
 use AMQPIntegrationPatterns\Body;
 use AMQPIntegrationPatterns\ContentType;
 use AMQPIntegrationPatterns\EventMessage;
 use AMQPIntegrationPatterns\MessageIdentifier;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,28 +39,13 @@ class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
         $messageIdentifier = MessageIdentifier::random();
         $eventMessage = EventMessage::create(
             $messageIdentifier,
-            new Body(new ContentType($contentType), $bodyText)
+            new Body(ContentType::fromString($contentType), $bodyText)
         );
 
-        $this->amqpMessageChannel->publish($eventMessage);
-
+        $this->amqpMessageChannel->send($eventMessage);
 
         // read a message
-        $actualMessage = null;
-        $callback = function (AMQPMessage $amqpMessage, QueueConsumer $consumer) use (
-            $bodyText,
-            $contentType,
-            $messageIdentifier,
-            &$actualMessage
-        ) {
-            $actualMessage = $amqpMessage;
-            $consumer->stopWaiting();
-        };
-
-        $this->amqpMessageChannel->waitForMessages($callback);
-
-        $this->assertTrue($actualMessage instanceof AMQPMessage);
-        /** @var $actualMessage AMQPMessage */
+        $actualMessage = $this->waitForOneMessage($this->amqpMessageChannel);
         $this->assertSame($bodyText, $actualMessage->body);
         $this->assertSame($contentType, $actualMessage->get('content_type'));
         $this->assertSame((string)$messageIdentifier, $actualMessage->get('message_id'));

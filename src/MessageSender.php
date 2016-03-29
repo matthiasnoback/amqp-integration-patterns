@@ -2,12 +2,11 @@
 
 namespace AMQPIntegrationPatterns;
 
-interface Receiver
+interface MessageSender
 {
     /**
      * @param Message $message
-     * @throws MessageIsInvalid
      * @return void
      */
-    public function process(Message $message);
+    public function send(Message $message);
 }

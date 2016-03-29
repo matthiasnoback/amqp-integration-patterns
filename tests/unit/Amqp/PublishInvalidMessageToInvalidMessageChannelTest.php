@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
 use AMQPIntegrationPatterns\Message;
 use AMQPIntegrationPatterns\Amqp\PublishInvalidMessageToInvalidMessageChannel;
-use AMQPIntegrationPatterns\Receiver;
+use AMQPIntegrationPatterns\MessageReceiver;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AlwaysSucceedingConsumer;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\ConsumerFailsBecauseMessageIsInvalid;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AmqpMessageDummy;

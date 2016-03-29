@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns;
 
 use Assert\Assertion;
 
-class Body
+final class Body
 {
     /**
      * @var ContentType
@@ -16,12 +16,12 @@ class Body
      */
     private $text;
 
-    public function __construct(ContentType $contentType, $text)
+    public function __construct(ContentType $contentType, $data)
     {
         $this->contentType = $contentType;
 
-        Assertion::string($text);
-        $this->text = $text;
+        Assertion::string($data);
+        $this->text = $data;
     }
 
     public function __toString()
