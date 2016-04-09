@@ -75,4 +75,14 @@ class JsonEncoderTest extends \PHPUnit_Framework_TestCase
 
         $this->jsonEncoder->decode(new Body(ContentType::json(), '"a string"'));
     }
+
+    /**
+     * @test
+     */
+    public function it_fails_when_normalized_content_type_is_not_json()
+    {
+        $this->setExpectedException(CouldNotDecodeData::class, 'Normalized content type should be application/json');
+
+        $this->jsonEncoder->decode(new Body(ContentType::xml(), '<some-xml/>'));
+    }
 }

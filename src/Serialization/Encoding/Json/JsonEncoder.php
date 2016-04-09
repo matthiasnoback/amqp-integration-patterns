@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Serialization\Encoding\Json;
 
 use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Serialization\Encoding\CouldNotDecodeData;
 use AMQPIntegrationPatterns\Serialization\Encoding\CouldNotEncodeData;
 use AMQPIntegrationPatterns\Serialization\Encoding\Decoder;
@@ -28,7 +29,11 @@ class JsonEncoder implements Encoder, Decoder
 
     public function decode(Body $body)
     {
-        // TODO assert that normalized content type is application/json
+        if ($body->contentType()->normalizedContentType() !== ContentType::CONTENT_TYPE_JSON) {
+            throw new CouldNotDecodeData(
+                'Normalized content type should be application/json'
+            );
+        }
         
         $decodedData = json_decode((string) $body, true);
 
