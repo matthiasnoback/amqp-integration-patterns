@@ -2,7 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
-use AMQPIntegrationPatterns\Amqp\AmqpMessageChannel;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
 use AMQPIntegrationPatterns\MessageChannel;
 use Assert\Assertion;
@@ -25,6 +24,7 @@ trait AmqpTestHelper
     }
 
     /**
+     * @param MessageChannel $messageChannel
      * @return AMQPMessage
      */
     protected function waitForOneMessage(MessageChannel $messageChannel)

@@ -5,10 +5,8 @@ namespace AMQPIntegrationPatterns\Amqp;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\MessageChannel;
-use AMQPIntegrationPatterns\EventMessage;
 use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\MessageSender;
-use Assert\Assertion;
 
 final class AmqpMessageChannel implements MessageChannel, MessageSender
 {
@@ -41,15 +39,9 @@ final class AmqpMessageChannel implements MessageChannel, MessageSender
         $this->messageFactory = $messageFactory;
     }
 
-    /**
-     * @param EventMessage $message
-     */
     public function send(Message $message)
     {
-        // TODO move this logic to the message factory (should be an abstract factory)
-        Assertion::isInstanceOf($message, EventMessage::class);
-
-        $amqpMessage = $this->messageFactory->createAmqpMessageFromEventMessage($message);
+        $amqpMessage = $this->messageFactory->createAmqpMessageFromMessage($message);
 
         $this->exchange->publish($amqpMessage, $this->routingKey);
     }

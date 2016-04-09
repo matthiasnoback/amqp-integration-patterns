@@ -8,7 +8,7 @@ use AMQPIntegrationPatterns\Amqp\AmqpMessageChannel;
 use AMQPIntegrationPatterns\Amqp\ChannelFactory;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
-use AMQPIntegrationPatterns\EventMessage;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Message\MessageIdentifier;
 
 class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
@@ -37,12 +37,12 @@ class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
         $bodyText = '{"message":"Hello"}';
         $contentType = 'application/json';
         $messageIdentifier = MessageIdentifier::random();
-        $eventMessage = EventMessage::create(
+        $message = Message::create(
             $messageIdentifier,
             new Body(ContentType::fromString($contentType), $bodyText)
         );
 
-        $this->amqpMessageChannel->send($eventMessage);
+        $this->amqpMessageChannel->send($message);
 
         // read a message
         $actualMessage = $this->waitForOneMessage($this->amqpMessageChannel);

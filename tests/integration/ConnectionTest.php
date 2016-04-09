@@ -13,7 +13,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function it_can_connect()
     {
         $exchange = 'router';
-        $queue = 'msgs';
+        $queue = 'messages';
         $conn = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest', '/');
         $ch = $conn->channel();
         $ch->queue_declare($queue, false, true, false, false);

@@ -2,21 +2,47 @@
 
 namespace AMQPIntegrationPatterns\Message;
 
-use AMQPIntegrationPatterns\Message\Body;
-use AMQPIntegrationPatterns\Message\MessageIdentifier;
-
 /**
  * TODO add message type and metadata
  */
-interface Message
+final class Message
 {
+    /**
+     * @var MessageIdentifier
+     */
+    private $messageIdentifier;
+
+    /**
+     * @var Body
+     */
+    private $body;
+
+    private function __construct()
+    {
+    }
+
+    public static function create(MessageIdentifier $messageIdentifier, Body $body)
+    {
+        $object = new self();
+        $object->messageIdentifier = $messageIdentifier;
+        $object->body = $body;
+
+        return $object;
+    }
+
     /**
      * @return MessageIdentifier
      */
-    public function messageIdentifier();
+    public function messageIdentifier()
+    {
+        return $this->messageIdentifier;
+    }
 
     /**
      * @return Body
      */
-    public function body();
+    public function body()
+    {
+        return $this->body;
+    }
 }

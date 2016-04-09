@@ -22,6 +22,7 @@ final class ChannelFactory
         $declaredExchange = ExchangeBuilder::create($this->channel, 'events')
             ->declareExchange();
 
+        // TODO use an "inflector" of some kind to generate a proper queue name
         $queueName = str_replace('.', '_', $eventName);
         $routingKey = $eventName;
 

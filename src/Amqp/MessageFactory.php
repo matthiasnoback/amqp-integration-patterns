@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns\Amqp;
 
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
-use AMQPIntegrationPatterns\EventMessage;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Message\MessageIdentifier;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -12,11 +12,12 @@ use PhpAmqpLib\Message\AMQPMessage;
 class MessageFactory
 {
     /**
-     * @return EventMessage
+     * @param AMQPMessage $amqpMessage
+     * @return Message
      */
-    public function createEventMessageFrom(AMQPMessage $amqpMessage)
+    public function createMessageFrom(AMQPMessage $amqpMessage)
     {
-        return EventMessage::create(
+        return Message::create(
             $this->extractMessageIdentifierFrom($amqpMessage),
             $this->extractBody($amqpMessage)
         );
@@ -52,10 +53,10 @@ class MessageFactory
     }
 
     /**
-     * @param EventMessage $message
+     * @param Message $message
      * @return AMQPMessage
      */
-    public function createAmqpMessageFromEventMessage(EventMessage $message)
+    public function createAmqpMessageFromMessage(Message $message)
     {
         $amqpMessage = new AMQPMessage();
         $amqpMessage->body = (string) $message->body();

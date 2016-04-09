@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
-use AMQPIntegrationPatterns\EventMessage;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Message\MessageIdentifier;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -26,7 +26,7 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_creates_an_event_message_for_a_given_amqp_message()
+    public function it_creates_a_message_for_a_given_amqp_message()
     {
         $amqpMessage = new AMQPMessage();
         $messageId = (string)Uuid::uuid4();
@@ -36,9 +36,9 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
         $bodyText = 'body text';
         $amqpMessage->setBody($bodyText);
 
-        $eventMessage = $this->messageFactory->createEventMessageFrom($amqpMessage);
-        $this->assertEquals(new MessageIdentifier($messageId), $eventMessage->messageIdentifier());
-        $this->assertEquals(new Body(ContentType::fromString($contentType), $bodyText), $eventMessage->body());
+        $message = $this->messageFactory->createMessageFrom($amqpMessage);
+        $this->assertEquals(new MessageIdentifier($messageId), $message->messageIdentifier());
+        $this->assertEquals(new Body(ContentType::fromString($contentType), $bodyText), $message->body());
     }
 
     /**
@@ -75,17 +75,17 @@ class MessageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_creates_an_amqp_message_for_an_event_message()
+    public function it_creates_an_amqp_message_for_a_message()
     {
         $bodyText = '{"message":"Hello"}';
         $contentType = 'application/json';
         $messageIdentifier = MessageIdentifier::random();
-        $eventMessage = EventMessage::create(
+        $message = Message::create(
             $messageIdentifier,
             new Body(ContentType::fromString($contentType), $bodyText)
         );
 
-        $amqpMessage = $this->messageFactory->createAmqpMessageFromEventMessage($eventMessage);
+        $amqpMessage = $this->messageFactory->createAmqpMessageFromMessage($message);
         $this->assertSame($bodyText, $amqpMessage->body);
         $this->assertSame($contentType, $amqpMessage->get('content_type'));
         $this->assertSame((string) $messageIdentifier, $amqpMessage->get('message_id'));

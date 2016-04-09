@@ -2,8 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Message;
 
-use AMQPIntegrationPatterns\Message\Message;
-
 interface MessageFactory
 {
     /**

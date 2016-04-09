@@ -1,6 +1,6 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Tests\Unit;
+namespace AMQPIntegrationPatterns\Tests\Unit\Message;
 
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;

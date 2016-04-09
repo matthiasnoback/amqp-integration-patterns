@@ -3,13 +3,10 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization;
 
 use AMQPIntegrationPatterns\Serialization\CanBeNormalized;
-use AMQPIntegrationPatterns\Serialization\CouldNotNormalizeObject;
 use AMQPIntegrationPatterns\Serialization\CouldNotSerializeData;
 use AMQPIntegrationPatterns\Serialization\Encoder;
 use AMQPIntegrationPatterns\Serialization\NormalizeAndEncodeObjectSerializer;
 use AMQPIntegrationPatterns\Serialization\Normalizer;
-use AMQPIntegrationPatterns\Serialization\Serializer;
-use AMQPIntegrationPatterns\Tests\Integration\Amqp\TestDoubles\NormalizableObject;
 
 class NormalizeAndEncodeObjectSerializerTest extends \PHPUnit_Framework_TestCase
 {

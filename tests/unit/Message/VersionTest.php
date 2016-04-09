@@ -1,6 +1,6 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Tests\Unit;
+namespace AMQPIntegrationPatterns\Tests\Unit\Message;
 
 use AMQPIntegrationPatterns\InvalidVersion;
 use AMQPIntegrationPatterns\Message\Version;

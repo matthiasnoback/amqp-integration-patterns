@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AMQPIntegrationPatterns\Tests\Unit;
+namespace AMQPIntegrationPatterns\Tests\Unit\Message;
 
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\Version;
