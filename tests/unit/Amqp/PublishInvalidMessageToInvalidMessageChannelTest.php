@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
-use AMQPIntegrationPatterns\Message;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Amqp\PublishInvalidMessageToInvalidMessageChannel;
 use AMQPIntegrationPatterns\MessageReceiver;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AlwaysSucceedingConsumer;

@@ -1,6 +1,12 @@
 <?php
 
-namespace AMQPIntegrationPatterns;
+namespace AMQPIntegrationPatterns\Message;
+
+use AMQPIntegrationPatterns\EventMessage;
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\MessageFactory;
 
 class PreConfiguredMessageFactory implements MessageFactory
 {

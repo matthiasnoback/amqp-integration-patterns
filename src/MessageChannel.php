@@ -3,6 +3,8 @@
 
 namespace AMQPIntegrationPatterns;
 
+use AMQPIntegrationPatterns\Message\Message;
+
 /**
  * TODO split into read and write message endpoints (channel is not something represented in code actually)
  */

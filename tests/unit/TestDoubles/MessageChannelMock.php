@@ -5,7 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\TestDoubles;
 
 
 use AMQPIntegrationPatterns\MessageChannel;
-use AMQPIntegrationPatterns\Message;
+use AMQPIntegrationPatterns\Message\Message;
 
 class MessageChannelMock implements MessageChannel
 {

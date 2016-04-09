@@ -2,10 +2,10 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit;
 
-use AMQPIntegrationPatterns\Body;
-use AMQPIntegrationPatterns\ContentType;
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\EventMessage;
-use AMQPIntegrationPatterns\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
 
 class EventMessageTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,8 @@
 <?php
 
-namespace AMQPIntegrationPatterns;
+namespace AMQPIntegrationPatterns\Message;
 
+use AMQPIntegrationPatterns\Message\ContentType;
 use Assert\Assertion;
 
 final class Body

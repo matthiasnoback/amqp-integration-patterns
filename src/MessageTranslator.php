@@ -2,6 +2,8 @@
 
 namespace AMQPIntegrationPatterns;
 
+use AMQPIntegrationPatterns\Message\Message;
+
 final class MessageTranslator
 {
     /**

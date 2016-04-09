@@ -2,10 +2,10 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit;
 
-use AMQPIntegrationPatterns\Body;
-use AMQPIntegrationPatterns\ContentType;
-use AMQPIntegrationPatterns\MessageIdentifier;
-use AMQPIntegrationPatterns\PreConfiguredMessageFactory;
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\PreConfiguredMessageFactory;
 
 class PreConfiguredMessageFactoryTest extends \PHPUnit_Framework_TestCase
 {

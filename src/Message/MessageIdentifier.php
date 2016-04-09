@@ -1,6 +1,6 @@
 <?php
 
-namespace AMQPIntegrationPatterns;
+namespace AMQPIntegrationPatterns\Message;
 
 use Assert\Assertion;
 use Ramsey\Uuid\Uuid;

@@ -1,7 +1,8 @@
 <?php
 
-namespace AMQPIntegrationPatterns;
+namespace AMQPIntegrationPatterns\Message;
 
+use AMQPIntegrationPatterns\Message\Version;
 use Assert\Assertion;
 use webignition\InternetMediaType\InternetMediaType;
 use webignition\InternetMediaType\Parser\Parser;

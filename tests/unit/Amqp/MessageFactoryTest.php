@@ -3,10 +3,10 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
-use AMQPIntegrationPatterns\Body;
-use AMQPIntegrationPatterns\ContentType;
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\EventMessage;
-use AMQPIntegrationPatterns\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
 use Ramsey\Uuid\Uuid;

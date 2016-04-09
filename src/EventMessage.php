@@ -2,6 +2,10 @@
 
 namespace AMQPIntegrationPatterns;
 
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\Message;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
+
 /**
  * TODO rethink object hierarchy
  */

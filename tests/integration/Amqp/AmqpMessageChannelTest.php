@@ -6,10 +6,10 @@ namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageChannel;
 use AMQPIntegrationPatterns\Amqp\ChannelFactory;
-use AMQPIntegrationPatterns\Body;
-use AMQPIntegrationPatterns\ContentType;
+use AMQPIntegrationPatterns\Message\Body;
+use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\EventMessage;
-use AMQPIntegrationPatterns\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
 
 class AmqpMessageChannelTest extends \PHPUnit_Framework_TestCase
 {

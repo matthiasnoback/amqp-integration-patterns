@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit;
 
-use AMQPIntegrationPatterns\MessageIdentifier;
+use AMQPIntegrationPatterns\Message\MessageIdentifier;
 use Ramsey\Uuid\Uuid;
 
 class MessageIdentifierTest extends \PHPUnit_Framework_TestCase

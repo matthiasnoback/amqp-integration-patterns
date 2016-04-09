@@ -6,7 +6,7 @@ use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\EventMessage;
-use AMQPIntegrationPatterns\Message;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\MessageSender;
 use Assert\Assertion;
 

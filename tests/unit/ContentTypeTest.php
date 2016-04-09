@@ -3,8 +3,8 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit;
 
-use AMQPIntegrationPatterns\ContentType;
-use AMQPIntegrationPatterns\Version;
+use AMQPIntegrationPatterns\Message\ContentType;
+use AMQPIntegrationPatterns\Message\Version;
 
 class ContentTypeTest extends \PHPUnit_Framework_TestCase
 {

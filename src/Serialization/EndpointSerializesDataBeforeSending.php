@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Serialization;
 
 use AMQPIntegrationPatterns\EndpointForSending;
-use AMQPIntegrationPatterns\MessageFactory;
+use AMQPIntegrationPatterns\Message\MessageFactory;
 use AMQPIntegrationPatterns\MessageSender;
 
 class EndpointSerializesDataBeforeSending implements EndpointForSending

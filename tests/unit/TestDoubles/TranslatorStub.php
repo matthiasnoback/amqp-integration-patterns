@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\TestDoubles;
 
-use AMQPIntegrationPatterns\Message;
+use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Translator;
 
 class TranslatorStub implements Translator

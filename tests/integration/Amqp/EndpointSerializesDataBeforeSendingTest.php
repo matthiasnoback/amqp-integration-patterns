@@ -3,9 +3,9 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\ChannelFactory;
-use AMQPIntegrationPatterns\ContentType;
+use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\MessageChannel;
-use AMQPIntegrationPatterns\PreConfiguredMessageFactory;
+use AMQPIntegrationPatterns\Message\PreConfiguredMessageFactory;
 use AMQPIntegrationPatterns\Serialization\EndpointSerializesDataBeforeSending;
 use AMQPIntegrationPatterns\Serialization\JsonEncoder;
 use AMQPIntegrationPatterns\Serialization\NormalizeAndEncodeObjectSerializer;
