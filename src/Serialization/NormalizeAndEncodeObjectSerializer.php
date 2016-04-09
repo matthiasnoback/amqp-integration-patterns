@@ -2,6 +2,10 @@
 
 namespace AMQPIntegrationPatterns\Serialization;
 
+use AMQPIntegrationPatterns\Serialization\Encoding\Encoder;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeNormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\Normalizer;
+
 class NormalizeAndEncodeObjectSerializer implements Serializer
 {
     /**

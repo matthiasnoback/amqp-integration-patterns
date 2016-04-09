@@ -2,7 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Message;
 
-use AMQPIntegrationPatterns\InvalidVersion;
 use Assert\Assertion;
 use Icecave\SemVer\Version as IcecaveVersion;
 

@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles;
 
-use AMQPIntegrationPatterns\Serialization\CanBeDenormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeDenormalized;
 
 class ImproperlyDenormalizingClass implements CanBeDenormalized
 {

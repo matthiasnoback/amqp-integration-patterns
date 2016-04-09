@@ -37,6 +37,10 @@ final class QueueBuilder
         return $queueBuilder;
     }
 
+    /**
+     * @param string $binding
+     * @return QueueBuilder
+     */
     public function withBinding($binding)
     {
         $this->bindings[] = new QueueBinding($this->exchangeName, $binding);

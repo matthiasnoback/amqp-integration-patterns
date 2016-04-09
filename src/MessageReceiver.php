@@ -2,12 +2,13 @@
 
 namespace AMQPIntegrationPatterns;
 
+use AMQPIntegrationPatterns\Message\Message;
+
 interface MessageReceiver
 {
     /**
-     * @param callable $callback
-     * @throws MessageIsInvalid
+     * @param Message $message
      * @return void
      */
-    public function waitForMessages(callable $callback);
+    public function receive(Message $message);
 }

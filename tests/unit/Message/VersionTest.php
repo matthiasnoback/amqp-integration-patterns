@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Message;
 
-use AMQPIntegrationPatterns\InvalidVersion;
+use AMQPIntegrationPatterns\Message\InvalidVersion;
 use AMQPIntegrationPatterns\Message\Version;
 
 class VersionTest extends \PHPUnit_Framework_TestCase

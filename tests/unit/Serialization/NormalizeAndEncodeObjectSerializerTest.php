@@ -2,11 +2,11 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization;
 
-use AMQPIntegrationPatterns\Serialization\CanBeNormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeNormalized;
 use AMQPIntegrationPatterns\Serialization\CouldNotSerializeData;
-use AMQPIntegrationPatterns\Serialization\Encoder;
+use AMQPIntegrationPatterns\Serialization\Encoding\Encoder;
 use AMQPIntegrationPatterns\Serialization\NormalizeAndEncodeObjectSerializer;
-use AMQPIntegrationPatterns\Serialization\Normalizer;
+use AMQPIntegrationPatterns\Serialization\Normalization\Normalizer;
 
 class NormalizeAndEncodeObjectSerializerTest extends \PHPUnit_Framework_TestCase
 {

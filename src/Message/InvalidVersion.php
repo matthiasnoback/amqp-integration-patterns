@@ -1,6 +1,6 @@
 <?php
 
-namespace AMQPIntegrationPatterns;
+namespace AMQPIntegrationPatterns\Message;
 
 final class InvalidVersion extends \LogicException
 {

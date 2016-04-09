@@ -1,11 +1,11 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Tests\Unit\Serialization;
+namespace AMQPIntegrationPatterns\Tests\Unit\Serialization\Normalization;
 
-use AMQPIntegrationPatterns\Serialization\CanBeDenormalized;
-use AMQPIntegrationPatterns\Serialization\CouldNotDenormalizeObject;
-use AMQPIntegrationPatterns\Serialization\CouldNotNormalizeObject;
-use AMQPIntegrationPatterns\Serialization\SimpleNormalizer;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeDenormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\CouldNotDenormalizeObject;
+use AMQPIntegrationPatterns\Serialization\Normalization\CouldNotNormalizeObject;
+use AMQPIntegrationPatterns\Serialization\Normalization\SimpleNormalizer;
 use AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles\ImproperlyDenormalizingClass;
 use AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles\ImproperlyNormalizingClass;
 use AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles\SimpleCanBeNormalizedClass;
@@ -60,6 +60,21 @@ class SimpleNormalizerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(
             \LogicException::class,
             $class . '::denormalize() did not return an object of type ' . $class
+        );
+
+        $this->normalizer->denormalize($class, []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_fails_it_the_provided_class_does_not_exist()
+    {
+        $class = 'NonExistingClass';
+
+        $this->setExpectedException(
+            CouldNotDenormalizeObject::class,
+            'Class "' . $class . '" does not exist'
         );
 
         $this->normalizer->denormalize($class, []);

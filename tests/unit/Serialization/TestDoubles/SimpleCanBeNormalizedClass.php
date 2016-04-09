@@ -2,8 +2,8 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles;
 
-use AMQPIntegrationPatterns\Serialization\CanBeDenormalized;
-use AMQPIntegrationPatterns\Serialization\CanBeNormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeDenormalized;
+use AMQPIntegrationPatterns\Serialization\Normalization\CanBeNormalized;
 
 class SimpleCanBeNormalizedClass implements CanBeNormalized, CanBeDenormalized
 {

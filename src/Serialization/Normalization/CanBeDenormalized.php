@@ -1,6 +1,6 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Serialization;
+namespace AMQPIntegrationPatterns\Serialization\Normalization;
 
 interface CanBeDenormalized
 {

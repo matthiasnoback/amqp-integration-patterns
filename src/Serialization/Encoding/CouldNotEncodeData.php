@@ -1,8 +1,8 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Serialization;
+namespace AMQPIntegrationPatterns\Serialization\Encoding;
 
-class CouldNotNormalizeObject extends \LogicException
+class CouldNotEncodeData extends \LogicException
 {
     public function __construct($message, \Exception $previous = null)
     {

@@ -7,9 +7,9 @@ use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\Message\PreConfiguredMessageFactory;
 use AMQPIntegrationPatterns\Serialization\EndpointSerializesDataBeforeSending;
-use AMQPIntegrationPatterns\Serialization\JsonEncoder;
+use AMQPIntegrationPatterns\Serialization\Encoding\Json\JsonEncoder;
 use AMQPIntegrationPatterns\Serialization\NormalizeAndEncodeObjectSerializer;
-use AMQPIntegrationPatterns\Serialization\SimpleNormalizer;
+use AMQPIntegrationPatterns\Serialization\Normalization\SimpleNormalizer;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\TestDoubles\NormalizableObject;
 use Ramsey\Uuid\Uuid;
 

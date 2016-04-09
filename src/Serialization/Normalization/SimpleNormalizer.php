@@ -1,8 +1,10 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Serialization;
+namespace AMQPIntegrationPatterns\Serialization\Normalization;
 
-class SimpleNormalizer implements Normalizer
+use Assert\Assertion;
+
+class SimpleNormalizer implements Normalizer, Denormalizer
 {
     public function normalize(CanBeNormalized $object)
     {
@@ -22,6 +24,16 @@ class SimpleNormalizer implements Normalizer
 
     public function denormalize($className, array $data)
     {
+        Assertion::string($className);
+
+        if (!class_exists($className)) {
+            throw new CouldNotDenormalizeObject(sprintf(
+                'Class "%s" does not exist',
+                $className,
+                CanBeDenormalized::class
+            ));
+        }
+
         if (!in_array(CanBeDenormalized::class, class_implements($className))) {
             throw new CouldNotDenormalizeObject(sprintf(
                 '%s should implement %s',

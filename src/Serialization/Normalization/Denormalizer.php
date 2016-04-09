@@ -1,16 +1,9 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Serialization;
+namespace AMQPIntegrationPatterns\Serialization\Normalization;
 
-interface Normalizer
+interface Denormalizer
 {
-    /**
-     * @param CanBeNormalized $object
-     * @return array Normalized data
-     * @throws CouldNotNormalizeObject
-     */
-    public function normalize(CanBeNormalized $object);
-
     /**
      * @param string $className A class that implements CanBeDenormalized
      * @param array $data The data to be used for reconstructing the object of type $class

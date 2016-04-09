@@ -1,8 +1,8 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Serialization;
+namespace AMQPIntegrationPatterns\Serialization\Normalization;
 
-class CouldNotDenormalizeObject extends \LogicException
+class CouldNotNormalizeObject extends \LogicException
 {
     public function __construct($message, \Exception $previous = null)
     {
