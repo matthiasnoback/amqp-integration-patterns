@@ -3,6 +3,8 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\Serialization;
 
 use AMQPIntegrationPatterns\Serialization\CanBeDenormalized;
+use AMQPIntegrationPatterns\Serialization\CouldNotDenormalizeObject;
+use AMQPIntegrationPatterns\Serialization\CouldNotNormalizeObject;
 use AMQPIntegrationPatterns\Serialization\SimpleNormalizer;
 use AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles\ImproperlyDenormalizingClass;
 use AMQPIntegrationPatterns\Tests\Unit\Serialization\TestDoubles\ImproperlyNormalizingClass;
@@ -41,7 +43,7 @@ class SimpleNormalizerTest extends \PHPUnit_Framework_TestCase
         $originalObject = new ImproperlyNormalizingClass();
 
         $this->setExpectedException(
-            \LogicException::class,
+            CouldNotNormalizeObject::class,
             ImproperlyNormalizingClass::class . '::normalize() should return an array'
         );
 
@@ -71,7 +73,7 @@ class SimpleNormalizerTest extends \PHPUnit_Framework_TestCase
         $class = \stdClass::class;
 
         $this->setExpectedException(
-            \LogicException::class,
+            CouldNotDenormalizeObject::class,
             $class . ' should implement ' . CanBeDenormalized::class
         );
 
