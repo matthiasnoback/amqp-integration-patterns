@@ -19,7 +19,7 @@ final class ContentType
      */
     private $internetMediaType;
 
-    public function __construct($textualContentType)
+    private function __construct($textualContentType)
     {
         Assertion::string($textualContentType);
         Assertion::notEmpty($textualContentType);
