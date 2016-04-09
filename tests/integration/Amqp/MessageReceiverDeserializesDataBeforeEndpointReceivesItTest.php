@@ -2,6 +2,9 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
+use AMQPIntegrationPatterns\Amqp\AmqpMessageConsumer;
+use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
+use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\EndpointForReceiving;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
@@ -12,22 +15,25 @@ use AMQPIntegrationPatterns\Serialization\Encoding\Json\JsonEncoder;
 use AMQPIntegrationPatterns\Serialization\MessageReceiverDeserializesDataBeforeEndpointReceivesIt;
 use AMQPIntegrationPatterns\Serialization\Normalization\SimpleNormalizer;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\TestDoubles\DenormalizableObject;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUnit_Framework_TestCase
 {
+    use AmqpTestHelper;
+
     /**
      * @test
      */
     public function it_produces_an_object_based_on_a_message()
     {
-        $message = Message::create(
-            MessageIdentifier::random(),
+        $expectedMessage = Message::create(
+            new MessageIdentifier('1234'),
             new Body(ContentType::json(), '{"field":"the value"}')
         );
 
         $expectedObject = new DenormalizableObject('the value');
 
-        $endpoint = $this->endpointShouldAcceptObject($expectedObject);
+        $endpoint = $this->endpointShouldAcceptObject($expectedObject, $expectedMessage);
 
         $messageReceiver = new MessageReceiverDeserializesDataBeforeEndpointReceivesIt(
             new DecodeAndDenormalizeObjectDeserializer(
@@ -38,19 +44,36 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
             $endpoint
         );
 
-        $messageReceiver->receive($message);
+        $declaredExchange = ExchangeBuilder::create($this->getAmqpChannel(), 'events')
+            ->declareExchange();
+
+        $declaredQueue = $declaredExchange
+            ->buildQueue('events')
+            ->withBinding('events')
+            ->declareQueue();
+        $declaredQueue->purge();
+
+        $amqpMessage = new AMQPMessage('{"field":"the value"}');
+        $amqpMessage->set('message_id', '1234');
+        $amqpMessage->set('content_type', 'application/json');
+        $declaredExchange->publish($amqpMessage, 'events');
+
+        $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new MessageFactory(), $messageReceiver);
+        $amqpMessageConsumer->consumeOneMessage();
     }
 
     /**
      * @param $expectedObject
-     * @return \PHPUnit_Framework_MockObject_MockObject|EndpointForReceiving
+     * @param Message $message
+     * @return EndpointForReceiving|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function endpointShouldAcceptObject($expectedObject)
+    private function endpointShouldAcceptObject($expectedObject, Message $message)
     {
         $endpoint = $this->getMock(EndpointForReceiving::class);
         $endpoint->expects($this->once())
             ->method('accept')
-            ->with($this->equalTo($expectedObject));
+            ->with($this->equalTo($expectedObject), $this->equalTo($message));
+
         return $endpoint;
     }
 }
