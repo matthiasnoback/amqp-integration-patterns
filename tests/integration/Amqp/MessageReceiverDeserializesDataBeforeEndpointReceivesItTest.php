@@ -10,6 +10,7 @@ use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Message\MessageIdentifier;
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use AMQPIntegrationPatterns\Serialization\DecodeAndDenormalizeObjectDeserializer;
 use AMQPIntegrationPatterns\Serialization\Encoding\Json\JsonEncoder;
 use AMQPIntegrationPatterns\Serialization\MessageReceiverDeserializesDataBeforeEndpointReceivesIt;
@@ -59,7 +60,7 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
         $declaredExchange->publish($amqpMessage, 'events');
 
         $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new MessageFactory(), $messageReceiver);
-        $amqpMessageConsumer->waitForOneMessage();
+        $amqpMessageConsumer->waitForMessage();
     }
 
     /**

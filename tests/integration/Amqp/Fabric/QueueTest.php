@@ -6,6 +6,7 @@ use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\AmqpTestHelper;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -50,7 +51,10 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var QueueConsumer $queueConsumer */
         $queueConsumer = null;
 
-        $queueConsumer = $this->declaredQueue->consume(function (AMQPMessage $amqpMessage, QueueConsumer $queueConsumer) use (
+        $queueConsumer = $this->declaredQueue->consume(function (
+            AMQPMessage $amqpMessage,
+            QueueConsumer $queueConsumer
+        ) use (
             $bodyText
         ) {
             $this->assertSame($bodyText, $amqpMessage->body);

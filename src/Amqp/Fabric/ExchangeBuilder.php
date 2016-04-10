@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 final class ExchangeBuilder
@@ -15,20 +16,23 @@ final class ExchangeBuilder
      * @var string
      */
     private $name;
-
-    private function __construct(AMQPChannel $channel, $name)
-    {
-        $this->channel = $channel;
-        $this->name = $name;
-    }
+    /**
+     * @var ProcessIdentifier
+     */
+    private $processIdentifier;
 
     public static function create(AMQPChannel $channel, $name)
     {
-        return new self($channel, $name);
-    }
+        $exchangeBuilder = new self();
+        $exchangeBuilder->channel = $channel;
+        $exchangeBuilder->processIdentifier = ProcessIdentifier::fromSystemGlobals();
+        $exchangeBuilder->name = $name;
 
+        return $exchangeBuilder;
+    }
+    
     public function declareExchange()
     {
-        return new DeclaredExchange($this->channel, new ExchangeName($this->name));
+        return new DeclaredExchange($this->channel, new ExchangeName($this->name), $this->processIdentifier);
     }
 }

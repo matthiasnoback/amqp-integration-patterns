@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use Assert\Assertion;
 use PhpAmqpLib\Channel\AMQPChannel;
 
@@ -16,9 +17,17 @@ final class DeclaredQueue
      * @var QueueName
      */
     private $name;
+    /**
+     * @var ProcessIdentifier
+     */
+    private $processIdentifier;
 
-    public function __construct(AMQPChannel $channel, QueueName $name, array $bindings)
-    {
+    public function __construct(
+        AMQPChannel $channel,
+        QueueName $name,
+        array $bindings,
+        ProcessIdentifier $processIdentifier
+    ) {
         $this->channel = $channel;
         $this->name = $name;
         Assertion::allIsInstanceOf($bindings, QueueBinding::class);
@@ -28,6 +37,8 @@ final class DeclaredQueue
             $name,
             $bindings
         );
+
+        $this->processIdentifier = $processIdentifier;
     }
 
     /**
@@ -38,7 +49,7 @@ final class DeclaredQueue
     private function declareQueueAndBindings(AMQPChannel $channel, QueueName $name, array $bindings)
     {
         $channel->queue_declare(
-            (string) $name,
+            (string)$name,
             false, // passive
             true, // durable
             false, // exclusive
@@ -49,13 +60,13 @@ final class DeclaredQueue
         );
 
         foreach ($bindings as $binding) {
-            $this->channel->queue_bind((string) $name, (string) $binding->exchangeName(), $binding->routingKey());
+            $this->channel->queue_bind((string)$name, (string)$binding->exchangeName(), $binding->routingKey());
         }
     }
 
     public function consume(callable $callback)
     {
-        return new QueueConsumer($this->channel, $this, $callback);
+        return new QueueConsumer($this->channel, $this->processIdentifier, $this, $callback);
     }
 
     public function name()
@@ -65,6 +76,6 @@ final class DeclaredQueue
 
     public function purge()
     {
-        $this->channel->queue_purge((string) $this->name);
+        $this->channel->queue_purge((string)$this->name);
     }
 }

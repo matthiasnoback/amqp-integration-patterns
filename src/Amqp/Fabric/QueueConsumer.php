@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -24,11 +25,17 @@ final class QueueConsumer
 
     private $wait = false;
 
-    public function __construct(AMQPChannel $channel, DeclaredQueue $queue, callable $callback)
+    /**
+     * @var ProcessIdentifier
+     */
+    private $processIdentifier;
+
+    public function __construct(AMQPChannel $channel, ProcessIdentifier $processIdentifier, DeclaredQueue $queue, callable $callback)
     {
         $this->channel = $channel;
         $this->queue = $queue;
         $this->callback = $callback;
+        $this->processIdentifier = $processIdentifier;
     }
 
     public function wait()
@@ -37,7 +44,7 @@ final class QueueConsumer
 
         $this->channel->basic_consume(
             (string) $this->queue->name(),
-            '', // consumer tag TODO provide unique value for this
+            (string) $this->processIdentifier, // consumer tag
             false, // no local
             false, // no ack
             false, // exclusive
@@ -46,9 +53,16 @@ final class QueueConsumer
                 call_user_func_array($this->callback, [$message, $this]);
             }
         );
+        // TODO implement ack/nack etc.
 
         while(count($this->channel->callbacks)) {
             if (!$this->wait) {
+                $this->channel->basic_cancel(
+                    (string) $this->processIdentifier,
+                    false, // no wait
+                    false // no return
+                );
+
                 break;
             }
 

@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 final class QueueBuilder
@@ -17,6 +18,11 @@ final class QueueBuilder
     private $exchangeName;
 
     /**
+     * @var ProcessIdentifier
+     */
+    private $processIdentifier;
+
+    /**
      * @var QueueName
      */
     private $queueName;
@@ -27,11 +33,16 @@ final class QueueBuilder
     {
     }
 
-    public static function create(AMQPChannel $channel, ExchangeName $exchangeName, $name)
-    {
+    public static function create(
+        AMQPChannel $channel,
+        ExchangeName $exchangeName,
+        ProcessIdentifier $processIdentifier,
+        $name
+    ) {
         $queueBuilder = new self();
         $queueBuilder->channel = $channel;
         $queueBuilder->exchangeName = $exchangeName;
+        $queueBuilder->processIdentifier = $processIdentifier;
         $queueBuilder->queueName = new QueueName($name);
 
         return $queueBuilder;
@@ -50,6 +61,6 @@ final class QueueBuilder
 
     public function declareQueue()
     {
-        return new DeclaredQueue($this->channel, $this->queueName, $this->bindings);
+        return new DeclaredQueue($this->channel, $this->queueName, $this->bindings, $this->processIdentifier);
     }
 }
