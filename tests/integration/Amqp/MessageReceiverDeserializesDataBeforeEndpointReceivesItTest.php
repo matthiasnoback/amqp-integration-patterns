@@ -59,7 +59,7 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
         $declaredExchange->publish($amqpMessage, 'events');
 
         $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new MessageFactory(), $messageReceiver);
-        $amqpMessageConsumer->consumeOneMessage();
+        $amqpMessageConsumer->waitForOneMessage();
     }
 
     /**

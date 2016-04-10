@@ -4,10 +4,11 @@ namespace AMQPIntegrationPatterns\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\MessageReceiver;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class AmqpMessageConsumer
+class AmqpMessageConsumer implements EventDrivenConsumer
 {
     /**
      * @var DeclaredQueue
@@ -34,11 +35,20 @@ class AmqpMessageConsumer
         $this->messageReceiver = $messageReceiver;
     }
 
-    public function consumeOneMessage()
+    public function waitForOneMessage()
     {
         $callback = function (AMQPMessage $message, QueueConsumer $queueConsumer) {
             $this->processMessage($message);
             $queueConsumer->stopWaiting();
+        };
+
+        $this->declaredQueue->consume($callback)->wait();
+    }
+
+    public function waitForMessages()
+    {
+        $callback = function (AMQPMessage $message) {
+            $this->processMessage($message);
         };
 
         $this->declaredQueue->consume($callback)->wait();
