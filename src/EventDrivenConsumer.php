@@ -7,10 +7,7 @@ namespace AMQPIntegrationPatterns;
  */
 interface EventDrivenConsumer
 {
-    /**
-     * TODO solve this with decoration (implement an actual consumer, which just stops the consumer)
-     */
-    public function waitForOneMessage();
+    public function waitForMessage();
 
-    public function waitForMessages();
+    public function stopWaiting();
 }

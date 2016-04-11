@@ -12,19 +12,20 @@ final class MessageTranslator
     private $translator;
 
     /**
-     * @var MessageChannel
+     * @var MessageSender
      */
-    private $channel;
+    private $messageSender;
 
-    public function __construct(Translator $translator, MessageChannel $channel)
+    public function __construct(Translator $translator, MessageSender $messageSender)
     {
-        $this->channel = $channel;
+        $this->messageSender = $messageSender;
         $this->translator = $translator;
     }
 
     public function consume(Message $message)
     {
         $translatedMessage = $this->translator->translate($message);
-        $this->channel->send($translatedMessage);
+        
+        $this->messageSender->send($translatedMessage);
     }
 }

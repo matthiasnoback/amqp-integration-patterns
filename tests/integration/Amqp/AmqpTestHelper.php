@@ -2,8 +2,8 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
+use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
-use AMQPIntegrationPatterns\MessageChannel;
 use Assert\Assertion;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -24,10 +24,10 @@ trait AmqpTestHelper
     }
 
     /**
-     * @param MessageChannel $messageChannel
+     * @param DeclaredQueue $queue
      * @return AMQPMessage
      */
-    protected function waitForOneMessage(MessageChannel $messageChannel)
+    protected function waitForOneMessage(DeclaredQueue $queue)
     {
         $actualMessage = null;
         $callback = function (AMQPMessage $amqpMessage, QueueConsumer $consumer) use (&$actualMessage) {
@@ -35,7 +35,7 @@ trait AmqpTestHelper
             $consumer->stopWaiting();
         };
 
-        $messageChannel->waitForMessages($callback);
+        $queue->consume($callback)->waitForMessage();
 
         Assertion::isInstanceOf($actualMessage, AMQPMessage::class);
 

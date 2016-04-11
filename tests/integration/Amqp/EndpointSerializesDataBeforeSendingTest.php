@@ -2,9 +2,12 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
-use AMQPIntegrationPatterns\Amqp\ChannelFactory;
+use AMQPIntegrationPatterns\Amqp\AmqpMessageSender;
+use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
+use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
+use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
+use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\Message\ContentType;
-use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\Message\PreConfiguredMessageFactory;
 use AMQPIntegrationPatterns\Serialization\EndpointSerializesDataBeforeSending;
 use AMQPIntegrationPatterns\Serialization\Encoding\Json\JsonEncoder;
@@ -18,18 +21,36 @@ class EndpointSerializesDataBeforeSendingTest extends \PHPUnit_Framework_TestCas
     use AmqpTestHelper;
 
     /**
-     * @var MessageChannel
+     * @var AmqpMessageSender
      */
-    private $amqpMessageChannel;
+    private $amqpMessageSender;
 
     /**
      * @var EndpointSerializesDataBeforeSending
      */
     private $endpoint;
 
+    /**
+     * @var DeclaredExchange
+     */
+    private $exchange;
+
+    /**
+     * @var DeclaredQueue
+     */
+    private $queue;
+
     protected function setUp()
     {
-        $this->amqpMessageChannel = (new ChannelFactory($this->getAmqpChannel()))->createEventMessageChannel(md5(uniqid()));
+        $this->exchange = ExchangeBuilder::create($this->getAmqpChannel(), 'events')->declareExchange();
+        $this->queue = $this->exchange->buildQueue('events')->withBinding('events')->declareQueue();
+        $this->queue->purge();
+
+        $this->amqpMessageSender = new AmqpMessageSender(
+            $this->exchange,
+            'events',
+            new MessageFactory()
+        );
 
         $this->endpoint = new EndpointSerializesDataBeforeSending(
             new PreConfiguredMessageFactory(ContentType::json()),
@@ -37,7 +58,7 @@ class EndpointSerializesDataBeforeSendingTest extends \PHPUnit_Framework_TestCas
                 new SimpleNormalizer(),
                 new JsonEncoder()
             ),
-            $this->amqpMessageChannel
+            $this->amqpMessageSender
         );
     }
 
@@ -51,7 +72,7 @@ class EndpointSerializesDataBeforeSendingTest extends \PHPUnit_Framework_TestCas
         $value = 'Hello world';
         $this->endpoint->send(new NormalizableObject($value));
 
-        $actualMessage = $this->waitForOneMessage($this->amqpMessageChannel);
+        $actualMessage = $this->waitForOneMessage($this->queue);
 
         $this->assertSame('{"field":"Hello world"}', $actualMessage->body);
         $this->assertSame('application/json', $actualMessage->get('content_type'));

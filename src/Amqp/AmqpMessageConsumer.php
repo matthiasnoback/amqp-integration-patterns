@@ -35,23 +35,14 @@ class AmqpMessageConsumer implements EventDrivenConsumer
         $this->messageReceiver = $messageReceiver;
     }
 
-    public function waitForOneMessage()
+    public function waitForMessage()
     {
         $callback = function (AMQPMessage $message, QueueConsumer $queueConsumer) {
             $this->processMessage($message);
             $queueConsumer->stopWaiting();
         };
 
-        $this->declaredQueue->consume($callback)->wait();
-    }
-
-    public function waitForMessages()
-    {
-        $callback = function (AMQPMessage $message) {
-            $this->processMessage($message);
-        };
-
-        $this->declaredQueue->consume($callback)->wait();
+        $this->declaredQueue->consume($callback)->waitForMessage();
     }
 
     private function processMessage(AMQPMessage $amqpMessage)
@@ -59,5 +50,10 @@ class AmqpMessageConsumer implements EventDrivenConsumer
         $message = $this->messageFactory->createMessageFrom($amqpMessage);
 
         $this->messageReceiver->receive($message);
+    }
+
+    public function stopWaiting()
+    {
+        
     }
 }

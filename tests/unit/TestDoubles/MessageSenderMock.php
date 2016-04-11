@@ -1,26 +1,16 @@
 <?php
 
-
 namespace AMQPIntegrationPatterns\Tests\Unit\TestDoubles;
 
-
-use AMQPIntegrationPatterns\MessageChannel;
 use AMQPIntegrationPatterns\Message\Message;
+use AMQPIntegrationPatterns\MessageSender;
 
-class MessageChannelMock implements MessageChannel
+class MessageSenderMock implements MessageSender
 {
     public $actualMessage;
 
     public function send(Message $message)
     {
         $this->actualMessage = $message;
-    }
-
-    public function waitForMessages(callable $callback)
-    {
-    }
-
-    public function purge()
-    {
     }
 }

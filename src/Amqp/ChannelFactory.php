@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
+use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 final class ChannelFactory
@@ -30,6 +31,6 @@ final class ChannelFactory
             ->withBinding($routingKey)
             ->declareQueue();
 
-        return new AmqpMessageChannel($declaredExchange, $declaredQueue, $routingKey, new MessageFactory());
+        return new AmqpMessageSender($declaredExchange, $declaredQueue, $routingKey, new MessageFactory());
     }
 }

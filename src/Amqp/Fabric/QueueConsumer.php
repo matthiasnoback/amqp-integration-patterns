@@ -2,11 +2,12 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 
-final class QueueConsumer
+final class QueueConsumer implements EventDrivenConsumer
 {
     /**
      * @var AMQPChannel
@@ -30,21 +31,25 @@ final class QueueConsumer
      */
     private $processIdentifier;
 
-    public function __construct(AMQPChannel $channel, ProcessIdentifier $processIdentifier, DeclaredQueue $queue, callable $callback)
-    {
+    public function __construct(
+        AMQPChannel $channel,
+        ProcessIdentifier $processIdentifier,
+        DeclaredQueue $queue,
+        callable $callback
+    ) {
         $this->channel = $channel;
         $this->queue = $queue;
         $this->callback = $callback;
         $this->processIdentifier = $processIdentifier;
     }
 
-    public function wait()
+    public function waitForMessage()
     {
         $this->wait = true;
 
         $this->channel->basic_consume(
-            (string) $this->queue->name(),
-            (string) $this->processIdentifier, // consumer tag
+            (string)$this->queue->name(),
+            (string)$this->processIdentifier, // consumer tag
             false, // no local
             false, // no ack
             false, // exclusive
@@ -53,12 +58,12 @@ final class QueueConsumer
                 call_user_func_array($this->callback, [$message, $this]);
             }
         );
-        // TODO implement ack/nack etc.
+        // TODO implement ack/nack etc. (in consumer)
 
-        while(count($this->channel->callbacks)) {
+        while (count($this->channel->callbacks)) {
             if (!$this->wait) {
                 $this->channel->basic_cancel(
-                    (string) $this->processIdentifier,
+                    (string)$this->processIdentifier,
                     false, // no wait
                     false // no return
                 );
@@ -66,6 +71,7 @@ final class QueueConsumer
                 break;
             }
 
+            // TODO configure a timeout
             $this->channel->wait();
         }
     }

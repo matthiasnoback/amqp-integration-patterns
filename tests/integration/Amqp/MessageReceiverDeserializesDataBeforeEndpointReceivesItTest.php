@@ -10,7 +10,6 @@ use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\Message\MessageIdentifier;
-use AMQPIntegrationPatterns\ProcessIdentifier;
 use AMQPIntegrationPatterns\Serialization\DecodeAndDenormalizeObjectDeserializer;
 use AMQPIntegrationPatterns\Serialization\Encoding\Json\JsonEncoder;
 use AMQPIntegrationPatterns\Serialization\MessageReceiverDeserializesDataBeforeEndpointReceivesIt;
