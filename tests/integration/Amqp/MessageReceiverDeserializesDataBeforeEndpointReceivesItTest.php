@@ -3,8 +3,9 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageConsumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
-use AMQPIntegrationPatterns\Amqp\MessageFactory;
+use AMQPIntegrationPatterns\Amqp\GenericMessageFactory;
 use AMQPIntegrationPatterns\EndpointForReceiving;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
@@ -58,7 +59,10 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
         $amqpMessage->set('content_type', 'application/json');
         $declaredExchange->publish($amqpMessage, 'events');
 
-        $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new MessageFactory(), $messageReceiver);
+        $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new ForwardToMessageReceiver(
+            new GenericMessageFactory(),
+            $messageReceiver
+        ));
         $amqpMessageConsumer->waitForMessage();
     }
 

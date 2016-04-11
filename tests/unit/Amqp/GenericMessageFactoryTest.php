@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
 
-use AMQPIntegrationPatterns\Amqp\MessageFactory;
+use AMQPIntegrationPatterns\Amqp\GenericMessageFactory;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\Message;
@@ -11,16 +11,16 @@ use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
 use Ramsey\Uuid\Uuid;
 
-class MessageFactoryTest extends \PHPUnit_Framework_TestCase
+class GenericMessageFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MessageFactory
+     * @var GenericMessageFactory
      */
     private $messageFactory;
 
     protected function setUp()
     {
-        $this->messageFactory = new MessageFactory();
+        $this->messageFactory = new GenericMessageFactory();
     }
 
     /**

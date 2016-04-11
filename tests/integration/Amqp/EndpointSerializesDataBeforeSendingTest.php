@@ -6,7 +6,7 @@ use AMQPIntegrationPatterns\Amqp\AmqpMessageSender;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
-use AMQPIntegrationPatterns\Amqp\MessageFactory;
+use AMQPIntegrationPatterns\Amqp\GenericMessageFactory;
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\PreConfiguredMessageFactory;
 use AMQPIntegrationPatterns\Serialization\EndpointSerializesDataBeforeSending;
@@ -49,7 +49,7 @@ class EndpointSerializesDataBeforeSendingTest extends \PHPUnit_Framework_TestCas
         $this->amqpMessageSender = new AmqpMessageSender(
             $this->exchange,
             'events',
-            new MessageFactory()
+            new GenericMessageFactory()
         );
 
         $this->endpoint = new EndpointSerializesDataBeforeSending(
