@@ -6,7 +6,6 @@ use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredExchange;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
-use AMQPIntegrationPatterns\ProcessIdentifier;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\AmqpTestHelper;
 use PhpAmqpLib\Message\AMQPMessage;
 

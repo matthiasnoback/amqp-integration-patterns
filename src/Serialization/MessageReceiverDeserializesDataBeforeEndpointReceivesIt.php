@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Serialization;
 
+use AMQPIntegrationPatterns\ApplicationError;
 use AMQPIntegrationPatterns\EndpointForReceiving;
 use AMQPIntegrationPatterns\Message\Message;
 use AMQPIntegrationPatterns\MessageReceiver;
@@ -28,6 +29,10 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesIt implements Message
     {
         $data = $this->deserializer->deserialize($message);
 
-        $this->endpoint->accept($data, $message);
+        try {
+            $this->endpoint->accept($data, $message);
+        } catch (\Exception $exception) {
+            throw ApplicationError::fromException($exception);
+        }
     }
 }
