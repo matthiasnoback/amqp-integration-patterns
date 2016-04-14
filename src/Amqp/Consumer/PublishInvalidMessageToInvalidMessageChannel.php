@@ -1,7 +1,9 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Amqp;
+namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
+use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
+use AMQPIntegrationPatterns\Amqp\Producer;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
 

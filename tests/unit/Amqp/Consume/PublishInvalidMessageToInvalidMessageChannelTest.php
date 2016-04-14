@@ -1,9 +1,9 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
+namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
-use AMQPIntegrationPatterns\Amqp\PublishInvalidMessageToInvalidMessageChannel;
+use AMQPIntegrationPatterns\Amqp\Consumer\PublishInvalidMessageToInvalidMessageChannel;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AlwaysSucceedingConsumer;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\ConsumerFailsBecauseMessageIsInvalid;
 use AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles\AmqpMessageDummy;

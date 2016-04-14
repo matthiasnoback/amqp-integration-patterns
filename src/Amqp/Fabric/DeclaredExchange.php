@@ -28,6 +28,18 @@ final class DeclaredExchange
         $this->channel = $channel;
         $this->exchangeName = $name;
         $this->processIdentifier = $processIdentifier;
+
+        $this->channel->exchange_declare(
+            (string) $this->exchangeName,
+            'topic',
+            false, // passive
+            true, // durable
+            false, // auto-delete
+            false, // internal
+            false, // no wait
+            null, // arguments
+            null // ticket
+        );
     }
 
     public function buildQueue($queueName)

@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\ProcessIdentifier;
 use Assert\Assertion;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -64,9 +65,9 @@ final class DeclaredQueue
         }
     }
 
-    public function consume(callable $callback)
+    public function consume(Consumer $consumer)
     {
-        return new QueueConsumer($this->channel, $this->processIdentifier, $this, $callback);
+        return new QueueConsumer($this->channel, $this->processIdentifier, $this, $consumer);
     }
 
     public function name()

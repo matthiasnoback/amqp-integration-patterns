@@ -7,3 +7,4 @@
 /tests              export-ignore
 /ansible            export-ignore
 /Vagrantfile        export-ignore
+/reset_vhost.sh     export-ignore

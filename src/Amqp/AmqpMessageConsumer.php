@@ -2,10 +2,9 @@
 
 namespace AMQPIntegrationPatterns\Amqp;
 
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
-use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
 use AMQPIntegrationPatterns\EventDrivenConsumer;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class AmqpMessageConsumer implements EventDrivenConsumer
 {
@@ -19,22 +18,15 @@ class AmqpMessageConsumer implements EventDrivenConsumer
      */
     private $consumer;
 
-    public function __construct(
-        DeclaredQueue $declaredQueue,
-        Consumer $consumer
-    ) {
+    public function __construct(DeclaredQueue $declaredQueue, Consumer $consumer)
+    {
         $this->declaredQueue = $declaredQueue;
         $this->consumer = $consumer;
     }
 
-    public function waitForMessage()
+    public function wait()
     {
-        $callback = function (AMQPMessage $amqpMessage, QueueConsumer $queueConsumer) {
-            $this->consumer->consume($amqpMessage);
-            $queueConsumer->stopWaiting();
-        };
-
-        $this->declaredQueue->consume($callback)->waitForMessage();
+        $this->declaredQueue->consume($this->consumer)->wait();
     }
 
     public function stopWaiting()

@@ -43,12 +43,15 @@ class EndpointSerializesDataBeforeSendingTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->exchange = ExchangeBuilder::create($this->getAmqpChannel(), 'events')->declareExchange();
-        $this->queue = $this->exchange->buildQueue('events')->withBinding('events')->declareQueue();
+        $this->queue = $this->exchange
+            ->buildQueue('events_of_specific_type')
+            ->withBinding('events_of_specific_type')
+            ->declareQueue();
         $this->queue->purge();
 
         $this->amqpMessageSender = new AmqpMessageSender(
             $this->exchange,
-            'events',
+            'events_of_specific_type',
             new GenericMessageFactory()
         );
 

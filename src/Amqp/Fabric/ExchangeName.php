@@ -14,7 +14,7 @@ final class ExchangeName
     public function __construct($name)
     {
         // TODO verify this assumption:
-        Assertion::regex($name, '/^[a-zA-Z_-]+$/', 'Invalid exchange name');
+        Assertion::regex($name, '/^[a-zA-Z0-9_-]+$/', 'Invalid exchange name');
         $this->name = $name;
     }
 

@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles;
 
-use AMQPIntegrationPatterns\Amqp\Consumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
 use PhpAmqpLib\Message\AMQPMessage;
 

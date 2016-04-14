@@ -2,8 +2,9 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
+use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeOneMessage;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
-use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
+use AMQPIntegrationPatterns\Tests\Integration\Amqp\Fabric\TestDoubles\ConsumerSpy;
 use Assert\Assertion;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -30,13 +31,11 @@ trait AmqpTestHelper
     protected function waitForOneMessage(DeclaredQueue $queue)
     {
         $actualMessage = null;
-        $callback = function (AMQPMessage $amqpMessage, QueueConsumer $consumer) use (&$actualMessage) {
-            $actualMessage = $amqpMessage;
-            $consumer->stopWaiting();
-        };
 
-        $queue->consume($callback)->waitForMessage();
+        $consumerSpy = new ConsumerSpy();
+        $queue->consume(new ConsumeOneMessage($consumerSpy))->wait();
 
+        $actualMessage = $consumerSpy->amqpMessage;
         Assertion::isInstanceOf($actualMessage, AMQPMessage::class);
 
         return $actualMessage;

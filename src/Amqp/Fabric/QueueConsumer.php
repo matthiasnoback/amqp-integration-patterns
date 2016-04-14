@@ -2,6 +2,8 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\StopWaiting;
 use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -19,31 +21,31 @@ final class QueueConsumer implements EventDrivenConsumer
      */
     private $queue;
 
-    /**
-     * @var callable
-     */
-    private $callback;
-
     private $wait = false;
 
     /**
      * @var ProcessIdentifier
      */
     private $processIdentifier;
+    
+    /**
+     * @var Consumer
+     */
+    private $consumer;
 
     public function __construct(
         AMQPChannel $channel,
         ProcessIdentifier $processIdentifier,
         DeclaredQueue $queue,
-        callable $callback
+        Consumer $consumer
     ) {
         $this->channel = $channel;
         $this->queue = $queue;
-        $this->callback = $callback;
         $this->processIdentifier = $processIdentifier;
+        $this->consumer = $consumer;
     }
 
-    public function waitForMessage()
+    public function wait()
     {
         $this->wait = true;
 
@@ -54,30 +56,40 @@ final class QueueConsumer implements EventDrivenConsumer
             false, // no ack
             false, // exclusive
             false, // no wait
-            function (AMQPMessage $message) {
-                call_user_func_array($this->callback, [$message, $this]);
+            function (AMQPMessage $amqpMessage) {
+                try {
+                    $this->consumer->consume($amqpMessage);
+                } catch (StopWaiting $exception) {
+                    $this->wait = false;
+                }
+
+                // TODO implement ack/nack etc. (in consumer)
             }
         );
-        // TODO implement ack/nack etc. (in consumer)
 
         while (count($this->channel->callbacks)) {
             if (!$this->wait) {
-                $this->channel->basic_cancel(
-                    (string)$this->processIdentifier,
-                    false, // no wait
-                    false // no return
-                );
+                $this->stopConsuming();
 
                 break;
             }
 
             // TODO configure a timeout
-            $this->channel->wait();
+            $this->channel->wait(null, false, 3);
         }
     }
 
     public function stopWaiting()
     {
         $this->wait = false;
+    }
+
+    private function stopConsuming()
+    {
+        $this->channel->basic_cancel(
+            (string)$this->processIdentifier,
+            false, // no wait
+            false // no return
+        );
     }
 }

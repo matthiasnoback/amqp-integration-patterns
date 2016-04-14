@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\TestDoubles;
 
 use AMQPIntegrationPatterns\MessageIsInvalid;
-use AMQPIntegrationPatterns\Amqp\Consumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class ConsumerFailsBecauseMessageIsInvalid implements Consumer

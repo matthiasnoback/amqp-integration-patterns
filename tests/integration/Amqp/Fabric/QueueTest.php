@@ -7,6 +7,7 @@ use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use AMQPIntegrationPatterns\Amqp\Fabric\QueueConsumer;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\AmqpTestHelper;
+use AMQPIntegrationPatterns\Tests\Integration\Amqp\Fabric\TestDoubles\ConsumerSpy;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class QueueTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->declaredExchange = ExchangeBuilder::create($this->getAmqpChannel(), 'events')
+        $this->declaredExchange = ExchangeBuilder::create($this->getAmqpChannel(), $this->randomExchangeName())
             ->declareExchange();
 
         $this->declaredQueue = $this->declaredExchange->buildQueue('events_of_specific_type')
@@ -50,17 +51,17 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var QueueConsumer $queueConsumer */
         $queueConsumer = null;
 
-        $queueConsumer = $this->declaredQueue->consume(function (
-            AMQPMessage $amqpMessage,
-            QueueConsumer $queueConsumer
-        ) use (
-            $bodyText
-        ) {
-            $this->assertSame($bodyText, $amqpMessage->body);
+        $consumerSpy = new ConsumerSpy(); // TODO wait for one message
 
-            $queueConsumer->stopWaiting();
-        });
+        $queueConsumer = $this->declaredQueue->consume($consumerSpy);
 
-        $queueConsumer->waitForMessage();
+        $queueConsumer->wait();
+
+        $this->assertSame($bodyText, $consumerSpy->amqpMessage->body);
+    }
+
+    private function randomExchangeName()
+    {
+        return md5(uniqid());
     }
 }

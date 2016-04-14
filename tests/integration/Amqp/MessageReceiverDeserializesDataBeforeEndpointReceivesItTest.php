@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageConsumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeOneMessage;
 use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use AMQPIntegrationPatterns\Amqp\GenericMessageFactory;
@@ -49,21 +50,26 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
             ->declareExchange();
 
         $declaredQueue = $declaredExchange
-            ->buildQueue('events')
-            ->withBinding('events')
+            ->buildQueue('events_of_specific_type')
+            ->withBinding('events_of_specific_type')
             ->declareQueue();
         $declaredQueue->purge();
 
         $amqpMessage = new AMQPMessage('{"field":"the value"}');
         $amqpMessage->set('message_id', '1234');
         $amqpMessage->set('content_type', 'application/json');
-        $declaredExchange->publish($amqpMessage, 'events');
+        $declaredExchange->publish($amqpMessage, 'events_of_specific_type');
 
-        $amqpMessageConsumer = new AmqpMessageConsumer($declaredQueue, new ForwardToMessageReceiver(
-            new GenericMessageFactory(),
-            $messageReceiver
-        ));
-        $amqpMessageConsumer->waitForMessage();
+        $amqpMessageConsumer = new AmqpMessageConsumer(
+            $declaredQueue,
+            new ConsumeOneMessage(
+                new ForwardToMessageReceiver(
+                    new GenericMessageFactory(),
+                    $messageReceiver
+                )
+            )
+        );
+        $amqpMessageConsumer->wait();
     }
 
     /**

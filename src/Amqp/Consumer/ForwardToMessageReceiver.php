@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
-use AMQPIntegrationPatterns\Amqp\Consumer;
+use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\MessageReceiver;
 use PhpAmqpLib\Message\AMQPMessage;
