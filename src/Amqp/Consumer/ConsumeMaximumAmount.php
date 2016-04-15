@@ -32,14 +32,12 @@ class ConsumeMaximumAmount implements Consumer
 
     public function consume(AMQPMessage $amqpMessage)
     {
-        $consumptionFlag = $this->consumer->consume($amqpMessage);
-
         $this->consumedAmount++;
+
+        $this->consumer->consume($amqpMessage);
 
         if ($this->consumedAmount >= $this->maximumAmount) {
             throw new StopConsuming();
         }
-
-        return $consumptionFlag;
     }
 }

@@ -27,7 +27,7 @@ final class QueueConsumer implements EventDrivenConsumer
      * @var ProcessIdentifier
      */
     private $processIdentifier;
-    
+
     /**
      * @var Consumer
      */
@@ -51,7 +51,7 @@ final class QueueConsumer implements EventDrivenConsumer
 
         $this->channel->basic_consume(
             (string)$this->queue->name(),
-            (string)$this->processIdentifier, // consumer tag
+            $this->consumerTag(),
             false, // no local
             false, // no ack
             false, // exclusive
@@ -59,11 +59,19 @@ final class QueueConsumer implements EventDrivenConsumer
             function (AMQPMessage $amqpMessage) {
                 try {
                     $this->consumer->consume($amqpMessage);
+
+                    $this->channel->basic_ack(
+                        $amqpMessage->delivery_info['delivery_tag'],
+                        false
+                    );
                 } catch (StopConsuming $exception) {
                     $this->wait = false;
+                } catch (\Exception $exception) {
+                    $this->channel->basic_reject(
+                        $amqpMessage->delivery_info['delivery_tag'],
+                        false
+                    );
                 }
-
-                // TODO implement ack/nack etc. (in consumer)
             }
         );
 
@@ -87,9 +95,14 @@ final class QueueConsumer implements EventDrivenConsumer
     private function stopConsuming()
     {
         $this->channel->basic_cancel(
-            (string)$this->processIdentifier,
+            $this->consumerTag(),
             false, // no wait
             false // no return
         );
+    }
+
+    private function consumerTag()
+    {
+        return (string)$this->processIdentifier;
     }
 }

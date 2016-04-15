@@ -2,7 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
-use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
 use AMQPIntegrationPatterns\Amqp\Producer;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -28,11 +27,11 @@ final class PublishInvalidMessageToInvalidMessageChannel implements Consumer
     public function consume(AMQPMessage $amqpMessage)
     {
         try {
-            return $this->nextConsumer->consume($amqpMessage);
+            $this->nextConsumer->consume($amqpMessage);
         } catch (MessageIsInvalid $exception) {
             $this->invalidMessageProducer->publish($amqpMessage);
 
-            return ConsumptionFlag::reject();
+            throw $exception;
         }
     }
 }

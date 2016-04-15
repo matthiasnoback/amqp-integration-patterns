@@ -9,14 +9,14 @@ use Psr\Log\LoggerInterface;
 class LogApplicationError implements Consumer
 {
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var Consumer
      */
     private $consumer;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     public function __construct(Consumer $consumer, LoggerInterface $logger)
     {
@@ -27,7 +27,7 @@ class LogApplicationError implements Consumer
     public function consume(AMQPMessage $amqpMessage)
     {
         try {
-            return $this->consumer->consume($amqpMessage);
+            $this->consumer->consume($amqpMessage);
         } catch (ApplicationError $exception) {
             $this->logger->critical(
                 'An application error occurred while processing a message',

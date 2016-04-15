@@ -2,7 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
-use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\MessageReceiver;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -30,7 +29,5 @@ class ForwardToMessageReceiver implements Consumer
         $message = $this->messageFactory->createMessageFrom($amqpMessage);
 
         $this->messageReceiver->receive($message);
-
-        return ConsumptionFlag::acknowledge();
     }
 }
