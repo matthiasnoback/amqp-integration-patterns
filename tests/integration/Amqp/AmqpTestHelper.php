@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
-use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeOneMessage;
+use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeMaximumAmount;
 use AMQPIntegrationPatterns\Amqp\Fabric\DeclaredQueue;
 use AMQPIntegrationPatterns\Tests\Integration\Amqp\Fabric\TestDoubles\ConsumerSpy;
 use Assert\Assertion;
@@ -33,7 +33,7 @@ trait AmqpTestHelper
         $actualMessage = null;
 
         $consumerSpy = new ConsumerSpy();
-        $queue->consume(new ConsumeOneMessage($consumerSpy))->wait();
+        $queue->consume(new ConsumeMaximumAmount($consumerSpy, 1))->wait();
 
         $actualMessage = $consumerSpy->amqpMessage;
         Assertion::isInstanceOf($actualMessage, AMQPMessage::class);

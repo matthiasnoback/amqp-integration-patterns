@@ -2,11 +2,11 @@
 
 namespace AMQPIntegrationPatterns;
 
-use AMQPIntegrationPatterns\BlockingIo\Blocking;
+use AMQPIntegrationPatterns\BlockingIo\BlocksWhileWaiting;
 
 /**
  * An event-driven consumer waits for a new message to arrive and consumes it accordingly.
  */
-interface EventDrivenConsumer extends Blocking
+interface EventDrivenConsumer extends BlocksWhileWaiting
 {
 }

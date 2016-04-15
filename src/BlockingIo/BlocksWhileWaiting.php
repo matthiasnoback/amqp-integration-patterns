@@ -2,7 +2,7 @@
 
 namespace AMQPIntegrationPatterns\BlockingIo;
 
-interface Blocking
+interface BlocksWhileWaiting
 {
     public function wait();
 

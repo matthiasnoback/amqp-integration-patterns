@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
 use AMQPIntegrationPatterns\Amqp\AmqpMessageConsumer;
-use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeOneMessage;
+use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeMaximumAmount;
 use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
 use AMQPIntegrationPatterns\Amqp\GenericMessageFactory;
@@ -62,11 +62,12 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
 
         $amqpMessageConsumer = new AmqpMessageConsumer(
             $declaredQueue,
-            new ConsumeOneMessage(
+            new ConsumeMaximumAmount(
                 new ForwardToMessageReceiver(
                     new GenericMessageFactory(),
                     $messageReceiver
-                )
+                ),
+                1
             )
         );
         $amqpMessageConsumer->wait();
