@@ -60,12 +60,10 @@ final class QueueConsumer implements EventDrivenConsumer
                 try {
                     $this->consumer->consume($amqpMessage);
 
-                    $this->channel->basic_ack(
-                        $amqpMessage->delivery_info['delivery_tag'],
-                        false
-                    );
+                    $this->acknowledge($amqpMessage);
                 } catch (StopConsuming $exception) {
-                    $this->wait = false;
+                    $this->stopWaiting();
+                    $this->acknowledge($amqpMessage); // TODO see if there is a better solution
                 } catch (\Exception $exception) {
                     $this->channel->basic_reject(
                         $amqpMessage->delivery_info['delivery_tag'],
@@ -104,5 +102,13 @@ final class QueueConsumer implements EventDrivenConsumer
     private function consumerTag()
     {
         return (string)$this->processIdentifier;
+    }
+
+    private function acknowledge(AMQPMessage $amqpMessage)
+    {
+        $this->channel->basic_ack(
+            $amqpMessage->delivery_info['delivery_tag'],
+            false
+        );
     }
 }

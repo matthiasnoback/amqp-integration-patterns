@@ -2,7 +2,6 @@
 
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp;
 
-use AMQPIntegrationPatterns\Amqp\AmqpMessageConsumer;
 use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeMaximumAmount;
 use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
@@ -60,8 +59,7 @@ class MessageReceiverDeserializesDataBeforeEndpointReceivesItTest extends \PHPUn
         $amqpMessage->set('content_type', 'application/json');
         $declaredExchange->publish($amqpMessage, 'events_of_specific_type');
 
-        $amqpMessageConsumer = new AmqpMessageConsumer(
-            $declaredQueue,
+        $amqpMessageConsumer = $declaredQueue->consume(
             new ConsumeMaximumAmount(
                 new ForwardToMessageReceiver(
                     new GenericMessageFactory(),

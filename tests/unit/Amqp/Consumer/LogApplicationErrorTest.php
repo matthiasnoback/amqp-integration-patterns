@@ -13,6 +13,26 @@ class LogApplicationErrorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_calls_the_inner_consumer()
+    {
+        $amqpMessage = new AMQPMessage();
+
+        $innerConsumer = $this->prophesize(Consumer::class);
+        $innerConsumer->consume($amqpMessage)->shouldBeCalled();
+
+        $logger = $this->prophesize(LoggerInterface::class);
+
+        $consumer = new LogApplicationError(
+            $innerConsumer->reveal(),
+            $logger->reveal()
+        );
+
+        $consumer->consume($amqpMessage);
+    }
+
+    /**
+     * @test
+     */
     public function it_logs_and_rethrows_a_catched_application_error()
     {
         $amqpMessage = new AMQPMessage();
