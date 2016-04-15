@@ -44,4 +44,12 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
         $this->assertSame($messageDummy, $nextReceiverMock->actualMessage);
         $this->assertSame($messageDummy, $producerMock->actualMessage);
     }
+
+    /**
+     * @test
+     */
+    public function it_rethrows_other_types_of_exceptions()
+    {
+        // TODO implement
+    }
 }

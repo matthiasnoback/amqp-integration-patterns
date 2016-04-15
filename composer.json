@@ -6,7 +6,8 @@
     "beberlei/assert": "^2.4",
     "ramsey/uuid": "^3.2",
     "webignition/internet-media-type": "^0.4.7",
-    "icecave/semver": "^3.0"
+    "icecave/semver": "^3.0",
+    "psr/log": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"

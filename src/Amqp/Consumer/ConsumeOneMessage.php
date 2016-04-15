@@ -20,6 +20,6 @@ class ConsumeOneMessage implements Consumer
     {
         $this->consumer->consume($amqpMessage);
 
-        throw new StopWaiting();
+        throw new StopConsuming();
     }
 }

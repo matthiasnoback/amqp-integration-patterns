@@ -1,8 +1,9 @@
 <?php
 
-namespace AMQPIntegrationPatterns\Tests\Unit\Amqp;
+namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
+use AMQPIntegrationPatterns\Amqp\ConsumptionFlag;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
@@ -32,6 +33,8 @@ class ForwardToMessageReceiverTest extends \PHPUnit_Framework_TestCase
             $messageReceiver->reveal()
         );
 
-        $consumer->consume($amqpMessage);
+        $consumptionFlag = $consumer->consume($amqpMessage);
+
+        $this->assertEquals(ConsumptionFlag::acknowledge(), $consumptionFlag);
     }
 }

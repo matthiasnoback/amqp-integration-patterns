@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp\Fabric\TestDoubles;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
-use AMQPIntegrationPatterns\Amqp\Consumer\StopWaiting;
+use AMQPIntegrationPatterns\Amqp\Consumer\StopConsuming;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class ConsumerSpy implements Consumer
@@ -17,6 +17,6 @@ class ConsumerSpy implements Consumer
     {
         $this->amqpMessage = $amqpMessage;
 
-        throw new StopWaiting();
+        throw new StopConsuming();
     }
 }
