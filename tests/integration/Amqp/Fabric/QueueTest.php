@@ -73,7 +73,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         );
 
         $consumerSpy = new SmartConsumerSpy();
-        $queueConsumer = $this->declaredQueue->consume(new ConsumeMaximumAmount($consumerSpy, 2));
+        $queueConsumer = $this->declaredQueue->consume(new ConsumeMaximumAmount($consumerSpy, 1));
 
         $queueConsumer->wait();
 

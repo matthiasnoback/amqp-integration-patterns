@@ -2,6 +2,7 @@
 
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\Amqp\Fabric\ExchangeBuilder;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -22,15 +23,15 @@ $declaredQueue = $declaredExchange->buildQueue('events_of_specific_type')
     ->withBinding('events_of_specific_type')
     ->declareQueue();
 
-class ConsoleLoggingConsumer implements Consumer
+class ConsumerDummy implements Consumer
 {
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
         echo $amqpMessage->body;
     }
 }
 
-$eventDrivenConsumer = $declaredQueue->consume(new ConsoleLoggingConsumer());
+$eventDrivenConsumer = $declaredQueue->consume(new ConsumerDummy());
 
 pcntl_signal(SIGINT, function () use (&$eventDrivenConsumer) {
     $eventDrivenConsumer->stopWaiting();

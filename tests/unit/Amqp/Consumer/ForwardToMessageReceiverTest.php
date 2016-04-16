@@ -4,6 +4,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\ForwardToMessageReceiver;
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\Message\Body;
 use AMQPIntegrationPatterns\Message\ContentType;
 use AMQPIntegrationPatterns\Message\Message;
@@ -32,6 +33,8 @@ class ForwardToMessageReceiverTest extends \PHPUnit_Framework_TestCase
             $messageReceiver->reveal()
         );
 
-        $consumer->consume($amqpMessage);
+        $eventDrivenConsumerDummy = $this->prophesize(EventDrivenConsumer::class)->reveal();
+
+        $consumer->consume($amqpMessage, $eventDrivenConsumerDummy);
     }
 }

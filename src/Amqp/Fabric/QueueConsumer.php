@@ -3,7 +3,6 @@
 namespace AMQPIntegrationPatterns\Amqp\Fabric;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
-use AMQPIntegrationPatterns\Amqp\Consumer\StopConsuming;
 use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -60,12 +59,9 @@ final class QueueConsumer implements EventDrivenConsumer
             false, // no wait
             function (AMQPMessage $amqpMessage) {
                 try {
-                    $this->consumer->consume($amqpMessage);
+                    $this->consumer->consume($amqpMessage, $this);
 
                     $this->acknowledge($amqpMessage);
-                } catch (StopConsuming $exception) {
-                    $this->stopWaiting();
-                    $this->acknowledge($amqpMessage); // TODO see if there is a better solution
                 } catch (\Exception $exception) {
                     $this->channel->basic_reject(
                         $amqpMessage->delivery_info['delivery_tag'],

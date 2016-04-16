@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\MessageFactory;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\MessageReceiver;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -24,7 +25,7 @@ class ForwardToMessageReceiver implements Consumer
         $this->messageReceiver = $messageReceiver;
     }
 
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
         $message = $this->messageFactory->createMessageFrom($amqpMessage);
 

@@ -5,6 +5,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\Consumer;
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
 use AMQPIntegrationPatterns\Amqp\Consumer\PublishInvalidMessageToInvalidMessageChannel;
 use AMQPIntegrationPatterns\Amqp\Producer;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -17,8 +18,10 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
     {
         $messageDummy = new AMQPMessage();
 
+        $eventDrivenConsumerDummy = $this->prophesize(EventDrivenConsumer::class)->reveal();
+
         $nextReceiverMock = $this->prophesize(Consumer::class);
-        $nextReceiverMock->consume($messageDummy)->shouldBeCalled();
+        $nextReceiverMock->consume($messageDummy, $eventDrivenConsumerDummy)->shouldBeCalled();
 
         $producerDummy = $this->prophesize(Producer::class);
 
@@ -26,7 +29,7 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
             $nextReceiverMock->reveal(),
             $producerDummy->reveal()
         );
-        $receiver->consume($messageDummy);
+        $receiver->consume($messageDummy, $eventDrivenConsumerDummy);
     }
 
     /**
@@ -36,9 +39,11 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
     {
         $messageDummy = new AMQPMessage();
 
+        $eventDrivenConsumerDummy = $this->prophesize(EventDrivenConsumer::class)->reveal();
+
         $nextReceiverMock = $this->prophesize(Consumer::class);
         $messageIsInvalid = new MessageIsInvalid('This message is invalid');
-        $nextReceiverMock->consume($messageDummy)->willThrow($messageIsInvalid);
+        $nextReceiverMock->consume($messageDummy, $eventDrivenConsumerDummy)->willThrow($messageIsInvalid);
 
         $producerMock = $this->prophesize(Producer::class);
         $producerMock->publish($messageDummy)->shouldBeCalled();
@@ -49,7 +54,7 @@ class PublishInvalidMessageToInvalidMessageChannelTest extends \PHPUnit_Framewor
         );
 
         try {
-            $receiver->consume($messageDummy);
+            $receiver->consume($messageDummy, $eventDrivenConsumerDummy);
             $this->fail();
         } catch (\Exception $exception) {
             $this->assertSame($messageIsInvalid, $exception);

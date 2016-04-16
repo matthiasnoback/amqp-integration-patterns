@@ -3,7 +3,7 @@
 namespace AMQPIntegrationPatterns\Tests\Integration\Amqp\Fabric\TestDoubles;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
-use AMQPIntegrationPatterns\Amqp\Consumer\StopConsuming;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class SmartConsumerSpy implements Consumer
@@ -13,7 +13,7 @@ class SmartConsumerSpy implements Consumer
      */
     public $amqpMessages = [];
 
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
         if (strpos($amqpMessage->body, 'fail') !== false) {
             throw new \Exception();
@@ -22,7 +22,7 @@ class SmartConsumerSpy implements Consumer
         $this->amqpMessages[] = $amqpMessage;
 
         if (strpos($amqpMessage->body, 'stop') !== false) {
-            throw new StopConsuming();
+            $eventDrivenConsumer->stopWaiting();
         }
     }
 }

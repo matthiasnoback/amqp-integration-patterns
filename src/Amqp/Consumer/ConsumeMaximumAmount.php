@@ -2,6 +2,7 @@
 
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use Assert\Assertion;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -30,14 +31,18 @@ class ConsumeMaximumAmount implements Consumer
         $this->maximumAmount = $maximumAmount;
     }
 
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
+        if ($this->consumedAmount >= $this->maximumAmount) {
+            throw new \LogicException('The maximum amount of messages has been consumed');
+        }
+
+        $this->consumer->consume($amqpMessage, $eventDrivenConsumer);
+
         $this->consumedAmount++;
 
-        $this->consumer->consume($amqpMessage);
-
         if ($this->consumedAmount >= $this->maximumAmount) {
-            throw new StopConsuming();
+            $eventDrivenConsumer->stopWaiting();
         }
     }
 }

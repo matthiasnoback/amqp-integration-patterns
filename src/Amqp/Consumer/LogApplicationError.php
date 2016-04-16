@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\ApplicationError;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 
@@ -24,10 +25,10 @@ class LogApplicationError implements Consumer
         $this->consumer = $consumer;
     }
 
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
         try {
-            $this->consumer->consume($amqpMessage);
+            $this->consumer->consume($amqpMessage, $eventDrivenConsumer);
         } catch (ApplicationError $exception) {
             $this->logger->critical(
                 'An application error occurred while processing a message',

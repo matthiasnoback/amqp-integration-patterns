@@ -4,7 +4,7 @@ namespace AMQPIntegrationPatterns\Tests\Unit\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\Consumer\ConsumeMaximumAmount;
 use AMQPIntegrationPatterns\Amqp\Consumer\Consumer;
-use AMQPIntegrationPatterns\Amqp\Consumer\StopConsuming;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class ConsumeMaximumAmountTest extends \PHPUnit_Framework_TestCase
@@ -16,16 +16,20 @@ class ConsumeMaximumAmountTest extends \PHPUnit_Framework_TestCase
     {
         $amqpMessage = new AMQPMessage();
 
+        $eventDrivenConsumer = $this->prophesize(EventDrivenConsumer::class);
+        $eventDrivenConsumer->stopWaiting()->shouldBeCalled();
+        $eventDrivenConsumer = $eventDrivenConsumer->reveal();
+
         $innerConsumer = $this->prophesize(Consumer::class);
-        $innerConsumer->consume($amqpMessage)->shouldBeCalledTimes(3);
+        $innerConsumer->consume($amqpMessage, $eventDrivenConsumer)->shouldBeCalledTimes(3);
 
         $consumeOneMessage = new ConsumeMaximumAmount($innerConsumer->reveal(), 3);
 
-        $consumeOneMessage->consume($amqpMessage);
-        $consumeOneMessage->consume($amqpMessage);
+        $consumeOneMessage->consume($amqpMessage, $eventDrivenConsumer);
+        $consumeOneMessage->consume($amqpMessage, $eventDrivenConsumer);
+        $consumeOneMessage->consume($amqpMessage, $eventDrivenConsumer);
 
-        // the third message will be consumed, but an exception will be thrown as well
-        $this->setExpectedException(StopConsuming::class);
-        $consumeOneMessage->consume($amqpMessage);
+        $this->setExpectedException(\LogicException::class);
+        $consumeOneMessage->consume($amqpMessage, $eventDrivenConsumer);
     }
 }

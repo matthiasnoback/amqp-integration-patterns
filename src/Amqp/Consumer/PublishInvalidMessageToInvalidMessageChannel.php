@@ -3,6 +3,7 @@
 namespace AMQPIntegrationPatterns\Amqp\Consumer;
 
 use AMQPIntegrationPatterns\Amqp\Producer;
+use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\MessageIsInvalid;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -24,10 +25,10 @@ final class PublishInvalidMessageToInvalidMessageChannel implements Consumer
         $this->invalidMessageProducer = $invalidMessageProducer;
     }
 
-    public function consume(AMQPMessage $amqpMessage)
+    public function consume(AMQPMessage $amqpMessage, EventDrivenConsumer $eventDrivenConsumer)
     {
         try {
-            $this->nextConsumer->consume($amqpMessage);
+            $this->nextConsumer->consume($amqpMessage, $eventDrivenConsumer);
         } catch (MessageIsInvalid $exception) {
             $this->invalidMessageProducer->publish($amqpMessage);
 
