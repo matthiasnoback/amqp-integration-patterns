@@ -7,4 +7,7 @@ namespace AMQPIntegrationPatterns;
  */
 interface EventDrivenConsumer
 {
+    public function wait();
+
+    public function stopWaiting();
 }
