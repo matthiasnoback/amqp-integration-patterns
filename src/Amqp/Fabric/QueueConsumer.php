@@ -7,6 +7,8 @@ use AMQPIntegrationPatterns\Amqp\Consumer\StopConsuming;
 use AMQPIntegrationPatterns\EventDrivenConsumer;
 use AMQPIntegrationPatterns\ProcessIdentifier;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Exception\AMQPIOWaitException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 
 final class QueueConsumer implements EventDrivenConsumer
@@ -74,14 +76,24 @@ final class QueueConsumer implements EventDrivenConsumer
         );
 
         while (count($this->channel->callbacks)) {
+            // TODO make this optional
+            pcntl_signal_dispatch();
+
             if (!$this->wait) {
                 $this->stopConsuming();
 
                 break;
             }
 
-            // TODO configure a timeout
-            $this->channel->wait(null, false, 3);
+            try {
+                // TODO configure a timeout
+                $this->channel->wait(null, false, 3);
+                pcntl_signal_dispatch();
+            } catch (AMQPTimeoutException $exception) {
+                // timeout has occurred
+            } catch (AMQPIOWaitException $exception) {
+                // process was interrupted
+            }
         }
     }
 
